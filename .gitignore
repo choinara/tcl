@@ -1,0 +1,59 @@
+# Backend
+backend/build/
+backend/.gradle/
+backend/out/
+backend/bin/
+
+# Frontend
+frontend/node_modules/
+frontend/node_modules
+frontend/dist/
+frontend/.vite/
+
+# 패키지 매니저 — npm 통일 (yarn 사용 금지)
+yarn.lock
+
+# Claude Code (선택적 추적 — 2026-05-27 정책 변경)
+# 하네스 정의(스킬/에이전트/스크립트/설정)는 추적, 임시/개인 파일만 ignore
+.claude/worktrees/
+.claude/settings.local.json
+.claude/scripts/worktree-registry.json
+.claude/.DS_Store
+myclaudemd/
+
+# peakmate-core
+peakmate-core/node_modules/
+
+# peakmate-core-be
+peakmate-core-be/build/
+peakmate-core-be/.gradle/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env.local
+.env.*.local
+.env.neon
+backend/.env.neon
+
+# Logs
+*.log
+
+# JWT RSA 키 파일
+**/keys/*.pem
+
+# Docs (로컬에서만 관리)
+docs/
+
+# 외부 프로젝트
+icc-front-통계대시보드/

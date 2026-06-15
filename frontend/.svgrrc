@@ -1,0 +1,21 @@
+{
+  "typescript": true,
+  "icon": false,
+  "svgo": true,
+  "svgoConfig": {
+    "plugins": [
+      {
+        "name": "preset-default",
+        "params": {
+          "overrides": {
+            "removeViewBox": false
+          }
+        }
+      },
+      {
+        "name": "removeDimensions",
+        "active": false
+      }
+    ]
+  }
+}

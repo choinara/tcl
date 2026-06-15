@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+
+    /* Path alias - peakmate-core paths first, app-specific fallback last */
+    "baseUrl": ".",
+    "paths": {
+      "@peakmate/e-approval": ["../../peakmate-Util/e-approval/frontend/src/index.ts"],
+      "@/components/grid/*": ["../peakmate-core/src/components/grid/*"],
+      "@/components/ui/*": ["../peakmate-core/src/components/ui/*"],
+      "@/components/auth/*": ["../peakmate-core/src/components/auth/*"],
+      "@/components/layout/*": ["../peakmate-core/src/components/layout/*"],
+      "@/components/notification/*": ["../peakmate-core/src/components/notification/*"],
+      "@/hooks/*": ["../peakmate-core/src/hooks/*"],
+      "@/stores/*": ["../peakmate-core/src/stores/*"],
+      "@/lib/*": ["../peakmate-core/src/lib/*"],
+      "@/locales/*": ["../peakmate-core/src/locales/*"],
+      "@/styles/*": ["../peakmate-core/src/styles/*"],
+      "@/i18n": ["../peakmate-core/src/i18n.ts"],
+      "@/*": ["./src/*"]
+    },
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "../peakmate-core/src", "../../peakmate-Util/e-approval/frontend/src"]
+}

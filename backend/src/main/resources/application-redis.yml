@@ -1,0 +1,22 @@
+peakmate:
+  redis:
+    enabled: true
+  timescaledb:
+    enabled: true
+    datasource:
+      url: jdbc:postgresql://localhost:5434/peakmate_ts
+      username: peakmate
+      password: peakmate
+      driver-class-name: org.postgresql.Driver
+
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 16380
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2

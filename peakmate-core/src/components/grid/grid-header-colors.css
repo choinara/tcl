@@ -1,0 +1,44 @@
+/* ─────────────────────────────────────────────
+   그리드 헤더 색상: 필수값/자동값/주말/그룹
+   Dogeum에서 검증 완료 후 peakmate-core 적용
+   사용법: colDef에 headerClass: 'ag-header-required' 추가
+   ───────────────────────────────────────────── */
+
+/* 필수 입력 헤더 — 적색 * */
+.ag-header-required .ag-header-cell-text::after {
+  content: ' *';
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* 자동/공통코드 헤더 — 파란 * */
+.ag-header-auto .ag-header-cell-text::after {
+  content: ' *';
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* 필수 + 자동 헤더 — 적색+파란 ** */
+.ag-header-required-auto .ag-header-cell-text::after {
+  content: ' **';
+  background: linear-gradient(90deg, #dc2626 50%, #2563eb 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* 주말 헤더 */
+.ag-header-weekend .ag-header-cell-label { color: #e11d48 !important; }
+
+/* 그룹 헤더 색상 (ColGroupDef용) */
+.grid-header-rm,
+.grid-header-rm .ag-header-group-cell-label { background-color: #F4B084 !important; }
+.grid-header-pd,
+.grid-header-pd .ag-header-group-cell-label { background-color: #A9D08E !important; }
+.grid-header-temp,
+.grid-header-temp .ag-header-group-cell-label { background-color: #BDD7EE !important; }
+.grid-header-rect,
+.grid-header-rect .ag-header-group-cell-label { background-color: #D9E2F3 !important; }
+.grid-header-conc,
+.grid-header-conc .ag-header-group-cell-label { background-color: #E2EFDA !important; }

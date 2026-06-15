@@ -1,0 +1,4 @@
+<svg id="checkbox_selected" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <rect id="CheckButton_C_Default" data-name="CheckButton/C/Default" width="20" height="20" rx="4" fill="#5082f0"/>
+  <path id="Combined_Shape" data-name="Combined Shape" d="M0,10V8H4V0H6V10Z" transform="translate(11.414 3.343) rotate(45)" fill="#fff"/>
+</svg>

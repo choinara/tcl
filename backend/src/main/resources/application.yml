@@ -1,0 +1,136 @@
+spring:
+  application:
+    name: peakmate-backend
+  profiles:
+    # active: ${SPRING_PROFILES_ACTIVE:local}
+    active: ${SPRING_PROFILES_ACTIVE:neon}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:55432/peakmate}
+    username: ${DB_USERNAME:peakmate}
+    password: ${DB_PASSWORD:peakmate}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+      minimum-idle: ${DB_POOL_MIN:5}
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      connection-timeout: 20000
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  # spring.mail.* 제거 — 메일 설정은 시스템 설정 UI(DB)에서 관리 (MailService가 동적 구성)
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: false
+  cache:
+    type: caffeine  # Redis 의존성 추가 후에도 기존 Caffeine 캐시 유지
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+    table: flyway_schema_history
+    # 다중 세션 병행 개발 시 14자리 타임스탬프 네이밍과 정수 V 번호 혼용 허용
+    out-of-order: true
+    # V20260528100000 파일 삭제 후 history 잔존 → V20260529200000 원복 마이그레이션이 정리
+    ignore-migration-patterns: "*:missing"
+
+server:
+  port: ${SERVER_PORT:9096}
+
+# Actuator (서버 상태 모니터링)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    mail:
+      enabled: false  # Spring 기본 MailHealthIndicator 비활성화 — 메일 설정이 DB 기반이므로 커스텀 HealthIndicator 사용
+
+# JWT settings (RS256 비대칭키)
+jwt:
+  # HS512 secret — RS256 안정화 후 별도 커밋으로 삭제 (롤백 대비 주석 유지)
+  # secret: ${JWT_SECRET:default-jwt-secret-key-for-development-only-change-in-production}
+  private-key-path: ${JWT_PRIVATE_KEY:file:./keys/jwt-private.pem}
+  public-key-path: ${JWT_PUBLIC_KEY:file:./keys/jwt-public.pem}
+  access-token-validity: ${JWT_ACCESS_VALIDITY:1800000}
+  refresh-token-validity: ${JWT_REFRESH_VALIDITY:10800000}
+
+# Security settings
+security:
+  https:
+    redirect-enabled: ${HTTPS_REDIRECT_ENABLED:false}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:6182}
+  admin-ip-whitelist:
+    enabled: ${ADMIN_IP_WHITELIST_ENABLED:false}
+    allowed-ips: ${ADMIN_IP_WHITELIST:}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    requests-per-minute: ${RATE_LIMIT_RPM:120}
+    login-per-minute: ${RATE_LIMIT_LOGIN_RPM:10}
+    api-write-per-minute: ${RATE_LIMIT_WRITE_RPM:60}
+  retention:
+    system-log-days: ${RETENTION_SYSTEM_LOG_DAYS:365}
+    login-attempt-days: ${RETENTION_LOGIN_ATTEMPT_DAYS:180}
+    audit-log-days: ${RETENTION_AUDIT_LOG_DAYS:730}
+    inactive-user-anonymize-days: ${RETENTION_INACTIVE_USER_ANONYMIZE_DAYS:365}
+  cookie:
+    secure: ${COOKIE_SECURE:true}
+  encryption:
+    key: ${ENCRYPTION_KEY:}
+    previous-key: ${ENCRYPTION_PREVIOUS_KEY:}
+  mfa:
+    issuer: ${MFA_ISSUER:Peakmate}
+
+# Mail
+mail:
+  enabled: ${MAIL_ENABLED:false}
+  from-address: ${MAIL_FROM:noreply@peakmate.local}
+  from-name: ${MAIL_FROM_NAME:PeakMate}
+
+# 개발메모 파일 저장 경로
+app:
+  memo:
+    base-path: ${MEMO_BASE_PATH:docs/memos}
+  email:
+    import-path: ${EMAIL_IMPORT_PATH:/Users/hschoi/Documents/Git/CHS/orbitmes_distribute/hyco/email_sample/extracted}
+    ai:
+      api-key: ${ANTHROPIC_API_KEY:placeholder}
+      model: ${EMAIL_AI_MODEL:claude-sonnet-4-6}
+      max-tokens: ${EMAIL_AI_MAX_TOKENS:2048}
+
+# Edge Server (OPC-UA / Vision 엣지 서버 인증)
+peakmate:
+  edge-server:
+    api-key: ${EDGE_SERVER_API_KEY:dev-edge-api-key-change-in-production}
+
+# Performance Monitoring
+performance:
+  slow-request-threshold-ms: ${SLOW_REQUEST_THRESHOLD_MS:3000}
+
+# Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha

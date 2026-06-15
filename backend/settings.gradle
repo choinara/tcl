@@ -1,0 +1,8 @@
+rootProject.name = 'backend'
+
+// peakmate-core-be 공용 모듈 (composite build — 동일 저장소)
+includeBuild('../peakmate-core-be') {
+    dependencySubstitution {
+        substitute module('com.peakmate:peakmate-core-be') using project(':')
+    }
+}

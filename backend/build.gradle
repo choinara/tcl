@@ -1,0 +1,128 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.cyclonedx.bom' version '1.8.2'
+}
+
+group = 'com.peakmate'
+version = '0.0.1-SNAPSHOT'
+description = 'peakmate-backend'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // QueryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    implementation "com.querydsl:querydsl-core:5.0.0"
+    implementation "com.querydsl:querydsl-collections:5.0.0"
+
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // Flyway (DB Migration)
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+
+    // AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // 공용 모듈
+    // e-approval: peakmate-Util 미사용 — to-be에서 전자결재 재구현 예정
+    implementation 'com.peakmate:peakmate-core-be'
+
+    // Actuator (서버 상태 모니터링)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Cache (Caffeine — 로컬 캐시)
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+
+    // Redis (OPC-UA 실시간 데이터 버퍼 — redis 프로파일 활성 시에만 사용)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Retry (메일 발송 등 재시도)
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework:spring-aspects'
+
+    // Security & JWT
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // HTML Template (메일 템플릿)
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Swagger/OpenAPI
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
+
+    // AAS4J - AASX 파일 파싱 (AAS Metamodel V3)
+    implementation 'org.eclipse.digitaltwin.aas4j:aas4j-model:1.0.4'
+    implementation 'org.eclipse.digitaltwin.aas4j:aas4j-dataformat-aasx:1.0.4'
+
+    // TOTP (MFA/OTP)
+    implementation 'dev.samstevens.totp:totp:1.7.1'
+
+    // OAuth2 Client (SSO)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // Test: H2 in-memory database
+    testRuntimeOnly 'com.h2database:h2'
+
+    // Test: Spring Security test support
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // JasperReports
+    implementation 'net.sf.jasperreports:jasperreports:6.21.3'
+
+    // Apache POI (Excel)
+    implementation 'org.apache.poi:poi-ooxml:5.3.0'
+
+    // OpenPDF (PDF generation for Excel convert)
+    implementation 'com.github.librepdf:openpdf:2.0.3'
+
+    // 전자계약: HTML→PDF 변환 (OpenHtmlToPdf)
+    implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
+
+    // 전자계약: 계약서 템플릿 변수 치환 (Mustache)
+    implementation 'com.samskivert:jmustache:1.16'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// plain jar 생성 비활성화 (Spring Boot 실행 가능 JAR만 생성)
+jar {
+    enabled = false
+}

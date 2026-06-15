@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:peakmate-test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  flyway:
+    enabled: false
+
+server:
+  port: 0
+
+# JWT settings (test-only values)
+jwt:
+  secret: test-jwt-secret-key-for-testing-purposes-only-must-be-long-enough
+  access-token-validity: 3600000
+  refresh-token-validity: 3600000
+
+# Security settings (relaxed for tests)
+security:
+  https:
+    redirect-enabled: false
+  cors:
+    allowed-origins: "*"
+  admin-ip-whitelist:
+    enabled: false
+    allowed-ips: ""
+  rate-limit:
+    enabled: false
+    requests-per-minute: 9999
+    login-per-minute: 9999
+    api-write-per-minute: 9999
+  retention:
+    system-log-days: 365
+    login-attempt-days: 180
+    audit-log-days: 730
+    inactive-user-anonymize-days: 365
+  cookie:
+    secure: false
+  encryption:
+    key: ""
+    previous-key: ""
+  mfa:
+    issuer: PeakmateTest
+
+# Performance Monitoring
+performance:
+  slow-request-threshold-ms: 10000

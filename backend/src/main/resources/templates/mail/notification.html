@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body { font-family: 'Malgun Gothic', Arial, sans-serif; background: #f4f5f7; margin: 0; padding: 20px; }
+        .container { max-width: 520px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { padding: 24px 32px; color: #fff; }
+        .header.info { background: #1e3a5f; }
+        .header.warning { background: #e67e22; }
+        .header.error { background: #c0392b; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+        .body { padding: 32px; }
+        .body p { color: #333; line-height: 1.7; margin: 0 0 16px; font-size: 14px; }
+        table.detail { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        table.detail th { background: #f0f4f8; text-align: left; padding: 8px 12px; font-size: 13px; color: #555; border: 1px solid #e5e7eb; width: 30%; }
+        table.detail td { padding: 8px 12px; font-size: 13px; color: #333; border: 1px solid #e5e7eb; }
+        .footer { padding: 20px 32px; background: #f9fafb; border-top: 1px solid #e5e7eb; }
+        .footer p { color: #999; font-size: 11px; margin: 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header" th:classappend="${level} ?: 'info'">
+        <h1 th:text="${title}">알림</h1>
+    </div>
+    <div class="body">
+        <p th:utext="${message}">알림 메시지 내용</p>
+
+        <table class="detail" th:if="${details != null and !details.isEmpty()}">
+            <tr th:each="entry : ${details}">
+                <th th:text="${entry.key}">항목</th>
+                <td th:text="${entry.value}">값</td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+        <p>본 메일은 <span th:text="${systemName} ?: 'PeakMate'">PeakMate</span> 시스템에서 자동 발송되었습니다.</p>
+        <p th:text="'발송 시각: ' + ${sentAt}">발송 시각: 2026-03-23 14:30:00</p>
+    </div>
+</div>
+</body>
+</html>

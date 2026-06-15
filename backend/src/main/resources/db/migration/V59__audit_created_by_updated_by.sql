@@ -1,0 +1,118 @@
+-- JPA Auditing createdBy/updatedBy 컬럼 추가
+-- AuditableEntity에 @CreatedBy/@LastModifiedBy 추가에 따른 DB 스키마 통일
+-- PostgreSQL DDL은 트랜잭션 내 원자적 실행 — 실패 시 전체 롤백
+
+-- 1. SystemNotification: BIGINT → VARCHAR 전환 (기존 데이터 null만 존재)
+ALTER TABLE system_notification DROP COLUMN IF EXISTS created_by;
+ALTER TABLE system_notification ADD COLUMN created_by VARCHAR(50);
+ALTER TABLE system_notification ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+
+-- 2. 기존 VARCHAR 컬럼이 있는 테이블: 누락분만 추가
+ALTER TABLE system_bulletin ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE dev_memo ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE wh_pre_inbound ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+-- dms_document, dms_doc_instance, report_template: 이미 created_by, updated_by 모두 존재
+
+-- 3. created_by/updated_by 컬럼이 없는 테이블에 추가
+ALTER TABLE admin_user ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE admin_user ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE admin_role ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE admin_role ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE admin_user_role ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE admin_user_role ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE admin_user_session ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE admin_user_session ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE admin_user_bank_account ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE admin_user_bank_account ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE team_info ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE team_info ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE department ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE department ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE company ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE company ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE position ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE position ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE system_menu ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE system_menu ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE menu_role_permission ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE menu_role_permission ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE user_permission ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE user_permission ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE user_preference ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE user_preference ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE system_setting ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE system_setting ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE system_log ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE system_log ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE login_attempts ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE login_attempts ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE consent_history ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE consent_history ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE password_history ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE password_history ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE pii_audit_log ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE pii_audit_log ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE common_code ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE common_code ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE common_code_group ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE common_code_group ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE order_registration ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE order_registration ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE daily_production_plan ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE daily_production_plan ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_customer ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_customer ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_supplier ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_supplier ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_partner ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_partner ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_product ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_product ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_raw_material ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_raw_material ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_equipment ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_equipment ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_production_rate ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_production_rate ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_quality_standard ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_quality_standard ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_quality_spec ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_quality_spec ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_standard_time ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_standard_time ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_process_chemical ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_process_chemical ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE master_appearance_inspection ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE master_appearance_inspection ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE aas_shell ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE aas_shell ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE aas_submodel ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE aas_submodel ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE aas_element ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE aas_element ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE aas_linkage ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE aas_linkage ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE aasx_file ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE aasx_file ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE asset_type ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE asset_type ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE asset_instance ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE asset_instance ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE data_source ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE data_source ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE collection_channel ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE collection_channel ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE collected_data ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE collected_data ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE opcua_data_point ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE opcua_data_point ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE opcua_gateway_log ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE opcua_gateway_log ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE i18n_message ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE i18n_message ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE receipt_record ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE receipt_record ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE dms_doc_file ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE dms_doc_file ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);
+ALTER TABLE dms_doc_instance_file ADD COLUMN IF NOT EXISTS created_by VARCHAR(50);
+ALTER TABLE dms_doc_instance_file ADD COLUMN IF NOT EXISTS updated_by VARCHAR(50);

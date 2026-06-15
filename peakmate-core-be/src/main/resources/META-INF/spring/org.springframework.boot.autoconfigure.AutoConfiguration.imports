@@ -1,0 +1,5 @@
+com.peakmate.core.audit.AuditingConfig
+com.peakmate.core.cache.CacheAutoConfiguration
+com.peakmate.core.retry.RetryAutoConfiguration
+com.peakmate.core.config.CoreAutoConfiguration
+com.peakmate.core.security.config.PasswordEncoderConfig

@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: ${NEON_DB_URL:jdbc:postgresql://ep-twilight-forest-aoa9sy53.c-2.ap-southeast-1.aws.neon.tech/peakmate?sslmode=require}
+    username: ${NEON_DB_USERNAME:neondb_owner}
+    password: ${NEON_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      # Neon scale-to-zero 대응: 연결 유효성 검증
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+
+  # V35~V38, V40 향후 추가 대비
+  flyway:
+    out-of-order: true
+
+# JWT 키 경로: backend/ 디렉토리 기준 -> 루트 keys/ 참조
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY:file:../keys/jwt-private.pem}
+  public-key-path: ${JWT_PUBLIC_KEY:file:../keys/jwt-public.pem}
+
+security:
+  cookie:
+    secure: false
+  encryption:
+    # 로컬과 동일한 개발용 더미 키 (개발 데이터 전용)
+    key: ${ENCRYPTION_KEY:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+
+logging:
+  level:
+    com.peakmate: DEBUG
+    org.hibernate.SQL: DEBUG
