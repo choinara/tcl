@@ -36,7 +36,7 @@ export default function EmailListPage() {
   const { t } = useTranslation();
   const perm = usePermission('EM0010');
   const { notify } = useToast();
-  const { allCodes } = useCommonCodes('EMAIL_PURPOSE');
+  const allCodes = useCommonCodes('EMAIL_PURPOSE');
 
   const [statusFilter, setStatusFilter] = useState('');
   const [purposeFilter, setPurposeFilter] = useState('');
