@@ -43,36 +43,9 @@ const UiSettingsPage = lazy(() => import('./domains/system/ui-settings/ui/UiSett
 const CommonCodePage = lazy(() => import('./domains/system/common-code/ui/CommonCodePage'));
 const I18nManagementPage = lazy(() => import('./domains/system/i18n/ui/I18nManagementPage'));
 
-// Master Data Management (기준정보관리) — TCL 유지 항목
-const CustomerPage = lazy(() => import('./domains/master/customer/ui/CustomerPage'));
-const StandardTimePage = lazy(() => import('./domains/master/standard-time/ui/StandardTimePage'));
-const PartnerPage = lazy(() => import('./domains/master/partner/ui/PartnerPage'));
-
 // 유틸리티
-const ReceiptOcrPage = lazy(() => import('./domains/utility/receipt-ocr/ui/ReceiptOcrPage'));
 const ReportPage = lazy(() => import('./domains/utility/reports/ui/ReportPage'));
 const ExcelConvertPage = lazy(() => import('./domains/utility/excel-convert/ui/ExcelConvertPage'));
-
-// 문서관리
-const DrawingPage = lazy(() => import('./domains/document/drawing/ui/DrawingPage'));
-const SopPage = lazy(() => import('./domains/document/sop/ui/SopPage'));
-const CertificatePage = lazy(() => import('./domains/document/certificate/ui/CertificatePage'));
-const TechnicalDocPage = lazy(() => import('./domains/document/technical/ui/TechnicalDocPage'));
-const DocTemplatePage = lazy(() => import('./domains/document/template/ui/DocTemplatePage'));
-const PeriodicDocPage = lazy(() => import('./domains/document/periodic/ui/PeriodicDocPage'));
-
-// 설비기술
-const EquipMaintenancePage = lazy(() => import('./domains/equip-tech/maintenance/ui/EquipMaintenancePage'));
-const EquipInspectionPage = lazy(() => import('./domains/equip-tech/inspection/ui/EquipInspectionPage'));
-const EquipRepairHistPage = lazy(() => import('./domains/equip-tech/repair-hist/ui/EquipRepairHistPage'));
-const EquipSparePage = lazy(() => import('./domains/equip-tech/spare/ui/EquipSparePage'));
-const EquipTechInfoPage = lazy(() => import('./domains/equip-tech/tech-info/ui/EquipTechInfoPage'));
-const EquipLossEventPage = lazy(() => import('./domains/equip-tech/loss-event/ui/EquipLossEventPage'));
-const EquipLossMgmtPage = lazy(() => import('./domains/equip-tech/loss-mgmt/ui/EquipLossMgmtPage'));
-const EquipMtbfPage = lazy(() => import('./domains/equip-tech/mtbf/ui/EquipMtbfPage'));
-const EquipMttrPage = lazy(() => import('./domains/equip-tech/mttr/ui/EquipMttrPage'));
-const EquipOperationPlanPage = lazy(() => import('./domains/equip-tech/operation-plan/ui/EquipOperationPlanPage'));
-const EquipDashboardPage = lazy(() => import('./domains/equip-tech/dashboard/ui/EquipDashboardPage'));
 
 // TCL — 이메일 자동화
 const EmailDashboardPage  = lazy(() => import('./domains/tcl/email/dashboard/ui/EmailDashboardPage'));
@@ -154,33 +127,9 @@ const pathToMenuCode: Record<string, string> = {
   '/system/ui-settings':      'SM0080',
   '/system/common-codes':     'SM0090',
   '/system/i18n':             'SM0100',
-  // 기준정보관리 — TCL 유지 항목
-  '/master/customer':          'MM0010',
-  '/master/standard-time':     'MM0030',
-  '/master/partner':           'MM0120',
   // 유틸리티
-  '/utility/receipt-ocr':     'UT0010',
   '/utility/reports':         'UT0020',
   '/utility/excel-convert':   'UT0030',
-  // 문서관리
-  '/document/drawing':        'DOC0010',
-  '/document/sop':            'DOC0020',
-  '/document/certificate':    'DOC0030',
-  '/document/technical':      'DOC0040',
-  '/document/template':       'DOC0050',
-  '/document/periodic':       'DOC0060',
-  // 설비기술
-  '/et/maintenance':          'ET0010',
-  '/et/inspection':           'ET0020',
-  '/et/repair-hist':          'ET0030',
-  '/et/spare':                'ET0050',
-  '/et/tech-info':            'ET0090',
-  '/et/loss-event':           'ET0100',
-  '/et/loss-mgmt':            'ET0060',
-  '/et/mtbf':                 'ET0070',
-  '/et/mttr':                 'ET0080',
-  '/et/operation-plan':       'ET0110',
-  '/et/dashboard':            'ET0120',
   // TCL — 이메일 자동화
   '/email/dashboard': 'EM0010',
   '/email/search':    'EM0020',
@@ -267,36 +216,9 @@ function App() {
                     <Route path="/system/common-codes" element={<CommonCodePage />} />
                     <Route path="/system/i18n" element={<I18nManagementPage />} />
 
-                    {/* 기준정보관리 — TCL 유지 항목 */}
-                    <Route path="/master/customer" element={<CustomerPage />} />
-                    <Route path="/master/standard-time" element={<StandardTimePage />} />
-                    <Route path="/master/partner" element={<PartnerPage />} />
-
                     {/* 유틸리티 */}
-                    <Route path="/utility/receipt-ocr" element={<ReceiptOcrPage />} />
                     <Route path="/utility/reports" element={<ReportPage />} />
                     <Route path="/utility/excel-convert" element={<ExcelConvertPage />} />
-
-                    {/* 문서관리 */}
-                    <Route path="/document/drawing" element={<DrawingPage />} />
-                    <Route path="/document/sop" element={<SopPage />} />
-                    <Route path="/document/certificate" element={<CertificatePage />} />
-                    <Route path="/document/technical" element={<TechnicalDocPage />} />
-                    <Route path="/document/template" element={<DocTemplatePage />} />
-                    <Route path="/document/periodic" element={<PeriodicDocPage />} />
-
-                    {/* 설비기술 */}
-                    <Route path="/et/maintenance" element={<EquipMaintenancePage />} />
-                    <Route path="/et/inspection" element={<EquipInspectionPage />} />
-                    <Route path="/et/repair-hist" element={<EquipRepairHistPage />} />
-                    <Route path="/et/spare" element={<EquipSparePage />} />
-                    <Route path="/et/tech-info" element={<EquipTechInfoPage />} />
-                    <Route path="/et/loss-event" element={<EquipLossEventPage />} />
-                    <Route path="/et/loss-mgmt" element={<EquipLossMgmtPage />} />
-                    <Route path="/et/mtbf" element={<EquipMtbfPage />} />
-                    <Route path="/et/mttr" element={<EquipMttrPage />} />
-                    <Route path="/et/operation-plan" element={<EquipOperationPlanPage />} />
-                    <Route path="/et/dashboard" element={<EquipDashboardPage />} />
 
                     {/* TCL — 이메일 자동화 */}
                     <Route path="/email/dashboard" element={<EmailDashboardPage />} />

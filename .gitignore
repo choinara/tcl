@@ -13,13 +13,10 @@ frontend/.vite/
 # 패키지 매니저 — npm 통일 (yarn 사용 금지)
 yarn.lock
 
-# Claude Code (선택적 추적 — 2026-05-27 정책 변경)
-# 하네스 정의(스킬/에이전트/스크립트/설정)는 추적, 임시/개인 파일만 ignore
-.claude/worktrees/
-.claude/settings.local.json
-.claude/scripts/worktree-registry.json
-.claude/.DS_Store
+# Claude Code — 개인 자산, 납품 제외
+.claude/
 myclaudemd/
+CLAUDE.md
 
 # Python
 python/.venv/
