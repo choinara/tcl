@@ -1,0 +1,16 @@
+services:
+  tcl-pg:
+    image: timescale/timescaledb:latest-pg16
+    container_name: tcl-pg
+    ports:
+      - "55433:5432"
+    environment:
+      POSTGRES_USER: tcl
+      POSTGRES_PASSWORD: tcl
+      POSTGRES_DB: tcl
+    volumes:
+      - tcl_pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  tcl_pg_data:

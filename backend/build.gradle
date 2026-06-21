@@ -46,9 +46,6 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-    // Flyway (DB Migration)
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-postgresql'
 
     // AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -116,6 +113,12 @@ dependencies {
 
     // 전자계약: 계약서 템플릿 변수 치환 (Mustache)
     implementation 'com.samskivert:jmustache:1.16'
+
+    // TCL: pgvector Java 클라이언트 (벡터 유사도 검색)
+    implementation 'com.pgvector:pgvector:0.1.6'
+
+    // TCL: WebSocket (실시간 알림)
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
