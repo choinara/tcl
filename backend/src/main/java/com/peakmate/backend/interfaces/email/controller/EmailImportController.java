@@ -27,21 +27,16 @@ public class EmailImportController {
     @PostMapping("/import")
     public ApiResponse<Map<String, Object>> importEmails() {
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
-        EmailImportService.ImportResult result = importService.importFromFolder();
+        importService.pollNewEmails();
 
-        String message = String.format("완료: %d건 가져옴, %d건 중복 건너뜀, %d건 실패",
-                result.imported(), result.skipped(), result.failed());
+        String message = "IMAP 폴링 트리거 완료 (결과는 서버 로그 참조)";
         try {
-            systemLogService.log("DATA_IMPORT", null, currentUser, null, "이메일 가져오기", message);
+            systemLogService.log("DATA_IMPORT", null, currentUser, null, "이메일 IMAP 폴링 수동 트리거", message);
         } catch (Exception e) {
             log.warn("이메일 가져오기 시스템 로그 기록 실패: {}", e.getMessage());
         }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("total", result.total());
-        response.put("imported", result.imported());
-        response.put("skipped", result.skipped());
-        response.put("failed", result.failed());
         response.put("message", message);
         return ApiResponse.success(response);
     }

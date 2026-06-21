@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.peakmate.backend.domain.email.entity.EmailMessage;
 import com.peakmate.backend.domain.email.repository.EmailMessageRepository;
+import com.peakmate.backend.infra.config.EmailAiProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +28,15 @@ public class EmailClassifyService {
     private static final BigDecimal CONFIDENCE_THRESHOLD = new BigDecimal("0.70");
 
     private static final String SYSTEM_PROMPT = """
-            당신은 중장비 부품 전문 수출 업체(HYCO HEAVYPARTS)의 이메일 분류 AI입니다.
-            수신된 B2B 이메일을 읽고, 발신자의 업무 목적을 아래 5가지 카테고리 중 하나로 분류하세요.
+            당신은 국제 물류 포워딩 회사(TCL)의 이메일 분류 AI입니다.
+            수신된 B2B 이메일을 읽고, 발신자의 업무 목적을 아래 6가지 카테고리 중 하나로 분류하세요.
 
             카테고리:
-            - QUOTATION: 가격 문의, 견적 요청, 단가 확인
-            - EXPORT_SHIPPING: 선적 요청, 수출 서류, 포워더 관련, 통관, BL/AWB/패킹리스트
-            - SPARE_PARTS: 부품 주문, 파트 리스트 조회, 특정 부품 재고 문의
-            - MAINTENANCE: 기술 지원 요청, A/S, 설치 문의, 고장 증상 전달
+            - FREIGHT_INQUIRY: 운임 문의, 견적 요청, 단가 확인, 운임 협의
+            - BOOKING: 부킹/SR 요청, 선복 문의, 예약 확인, 스케줄 요청
+            - BL_DOCS: B/L 요청, 선적서류(패킹리스트·인보이스·CO), AWB, 수출신고, 서류 수정
+            - TRACKING: 컨테이너 추적, 선박 위치, ETA/ETD 확인, 도착 예정 문의
+            - CUSTOMS: 통관 문의, 관부과세, HS CODE, 수입신고, 관세청 서류
             - OTHER: 위 카테고리에 해당하지 않는 경우
 
             응답 형식 (JSON만 반환, 마크다운 코드블록 없이):
@@ -50,15 +51,7 @@ public class EmailClassifyService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final EmailMessageRepository messageRepository;
-
-    @Value("${app.email.ai.api-key:}")
-    private String configApiKey;
-
-    @Value("${app.email.ai.model:claude-sonnet-4-6}")
-    private String configModel;
-
-    @Value("${app.email.ai.max-tokens:512}")
-    private int maxTokens;
+    private final EmailAiProperties emailAiProperties;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -108,8 +101,8 @@ public class EmailClassifyService {
         userMessage.put("content", userPrompt);
 
         Map<String, Object> requestBody = new LinkedHashMap<>();
-        requestBody.put("model", configModel);
-        requestBody.put("max_tokens", maxTokens);
+        requestBody.put("model", emailAiProperties.getModel());
+        requestBody.put("max_tokens", emailAiProperties.getMaxTokens());
         requestBody.put("system", SYSTEM_PROMPT);
         requestBody.put("messages", List.of(userMessage));
 
@@ -176,13 +169,13 @@ public class EmailClassifyService {
         return new ClassificationResponse(purpose, confidence);
     }
 
-    /** DB(system_settings) → application.yml 순으로 API 키 조회 */
+    /** DB(system_setting) → application.yml 순으로 API 키 조회 */
+    @SuppressWarnings("unchecked")
     private String resolveApiKey() {
         try {
-            @SuppressWarnings("unchecked")
             List<String> results = entityManager.createNativeQuery(
-                    "SELECT setting_value FROM system_settings " +
-                    "WHERE setting_key = 'app.email.ai.api-key' AND enabled = true")
+                    "SELECT setting_value FROM system_setting " +
+                    "WHERE setting_key = 'app.email.ai.api-key'")
                     .getResultList();
             if (!results.isEmpty()) {
                 String dbValue = results.get(0);
@@ -191,7 +184,7 @@ public class EmailClassifyService {
         } catch (Exception e) {
             log.debug("DB에서 이메일 AI API 키 조회 실패, yml 폴백: {}", e.getMessage());
         }
-        return configApiKey;
+        return emailAiProperties.getApiKey();
     }
 
     private record ClassificationResponse(String purpose, BigDecimal confidence) {}
