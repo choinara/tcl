@@ -43,57 +43,23 @@ const UiSettingsPage = lazy(() => import('./domains/system/ui-settings/ui/UiSett
 const CommonCodePage = lazy(() => import('./domains/system/common-code/ui/CommonCodePage'));
 const I18nManagementPage = lazy(() => import('./domains/system/i18n/ui/I18nManagementPage'));
 
-// Production Management
-const ProductionPlanPage = lazy(() => import('./domains/production/plan/ui/ProductionPlanPage'));
-const OrderRegistrationPage = lazy(() => import('./domains/production/order/ui/OrderRegistrationPage'));
-const DailyProductionPlanPage = lazy(() => import('./domains/production/daily-plan/ui/DailyProductionPlanPage'));
-const ApsPage = lazy(() => import('./domains/production/aps/ui/ApsPage'));
-const ApsCapacitySlotPage = lazy(() => import('./domains/production/aps/ui/ApsCapacitySlotPage'));
-const ApsTaktTimePage = lazy(() => import('./domains/production/aps/ui/ApsTaktTimePage'));
-const ApsGanttPage = lazy(() => import('./domains/production/aps/ui/ApsGanttPage'));
-const ShipmentPlanPage = lazy(() => import('./domains/production/shipment-plan/ui/ShipmentPlanPage'));
-
-// 전자결재
-const ApprovalPage = lazy(() => import('./domains/approval/ui/ApprovalPage'));
-const ApprovalLinePage = lazy(() => import('./domains/approval/lines/ui/ApprovalLinePage'));
-const ApprovalStatusPage = lazy(() => import('./domains/approval/status/ui/ApprovalStatusPage'));
-
-// Master Data Management (기준정보관리)
+// Master Data Management (기준정보관리) — TCL 유지 항목
 const CustomerPage = lazy(() => import('./domains/master/customer/ui/CustomerPage'));
-// SupplierPage: 협력사관리(PartnerPage)로 통합됨 — 라우트 제거, 코드는 유지
 const StandardTimePage = lazy(() => import('./domains/master/standard-time/ui/StandardTimePage'));
-const ProcessChemicalPage = lazy(() => import('./domains/master/process-chemical/ui/ProcessChemicalPage'));
-const EquipmentPage = lazy(() => import('./domains/master/equipment/ui/EquipmentPage'));
-const RawMaterialPage = lazy(() => import('./domains/master/raw-material/ui/RawMaterialPage'));
-const ProductPage = lazy(() => import('./domains/master/product/ui/ProductPage'));
-const ProductionRatePage = lazy(() => import('./domains/master/production-rate/ui/ProductionRatePage'));
-const QualityStandardPage = lazy(() => import('./domains/master/quality-standard/ui/QualityStandardPage'));
-const QualitySpecPage = lazy(() => import('./domains/master/quality-spec/ui/QualitySpecPage'));
-const AppearanceInspectionPage = lazy(() => import('./domains/master/appearance-inspection/ui/AppearanceInspectionPage'));
 const PartnerPage = lazy(() => import('./domains/master/partner/ui/PartnerPage'));
 
-// 유틸리티 (전자결재 하위)
+// 유틸리티
 const ReceiptOcrPage = lazy(() => import('./domains/utility/receipt-ocr/ui/ReceiptOcrPage'));
 const ReportPage = lazy(() => import('./domains/utility/reports/ui/ReportPage'));
 const ExcelConvertPage = lazy(() => import('./domains/utility/excel-convert/ui/ExcelConvertPage'));
 
-// 문서관리 (전자결재 하위)
+// 문서관리
 const DrawingPage = lazy(() => import('./domains/document/drawing/ui/DrawingPage'));
 const SopPage = lazy(() => import('./domains/document/sop/ui/SopPage'));
 const CertificatePage = lazy(() => import('./domains/document/certificate/ui/CertificatePage'));
 const TechnicalDocPage = lazy(() => import('./domains/document/technical/ui/TechnicalDocPage'));
 const DocTemplatePage = lazy(() => import('./domains/document/template/ui/DocTemplatePage'));
 const PeriodicDocPage = lazy(() => import('./domains/document/periodic/ui/PeriodicDocPage'));
-
-// 자재관리
-const PreInboundPage = lazy(() => import('./domains/warehouse/pre-inbound/ui/PreInboundPage'));
-
-// 이메일관리
-const EmailListPage = lazy(() => import('./domains/email/list/ui/EmailListPage'));
-const LabelMappingPage = lazy(() => import('./domains/email/settings/labels/ui/LabelMappingPage'));
-const CustomerMappingPage = lazy(() => import('./domains/email/settings/customer-mapping/ui/CustomerMappingPage'));
-const OauthSettingPage = lazy(() => import('./domains/email/settings/oauth/ui/OauthSettingPage'));
-const AiUsagePage = lazy(() => import('./domains/email/settings/ai-usage/ui/AiUsagePage'));
 
 // 설비기술
 const EquipMaintenancePage = lazy(() => import('./domains/equip-tech/maintenance/ui/EquipMaintenancePage'));
@@ -108,17 +74,25 @@ const EquipMttrPage = lazy(() => import('./domains/equip-tech/mttr/ui/EquipMttrP
 const EquipOperationPlanPage = lazy(() => import('./domains/equip-tech/operation-plan/ui/EquipOperationPlanPage'));
 const EquipDashboardPage = lazy(() => import('./domains/equip-tech/dashboard/ui/EquipDashboardPage'));
 
-// AAS/OPC-UA
-const AasModelingPage = lazy(() => import('./domains/aas/model/ui/AasModelingPage'));
-const AasInstancesPage = lazy(() => import('./domains/aas/instances/ui/AasInstancesPage'));
-const AasInstancesOldPage = lazy(() => import('./domains/aas/instances/ui/AasInstancesOldPage'));
-const AasCollectionPage = lazy(() => import('./domains/aas/collection/ui/AasCollectionPage'));
-const AasConnectionPage = lazy(() => import('./domains/aas/connection/ui/AasConnectionPage'));
-const AasDataPointPage = lazy(() => import('./domains/aas/collection/ui/AasDataPointPage'));
-const AasLinkagePage = lazy(() => import('./domains/aas/linkage/ui/AasLinkagePage'));
-const AasGatewayPage = lazy(() => import('./domains/aas/gateway/ui/AasGatewayPage'));
-const AasMonitorPage = lazy(() => import('./domains/aas/monitor/ui/AasMonitorPage'));
-const AasPipelineMonitorPage = lazy(() => import('./domains/aas/pipeline-monitor/ui/AasPipelineMonitorPage'));
+// TCL — 이메일 자동화
+const EmailDashboardPage  = lazy(() => import('./domains/tcl/email/dashboard/ui/EmailDashboardPage'));
+const EmailSearchPage     = lazy(() => import('./domains/tcl/email/search/ui/EmailSearchPage'));
+const ImapAccountPage     = lazy(() => import('./domains/tcl/email/accounts/ui/ImapAccountPage'));
+const AssignmentRulePage  = lazy(() => import('./domains/tcl/email/rules/ui/AssignmentRulePage'));
+
+// TCL — 운임·스케줄
+const FreightRatePage     = lazy(() => import('./domains/tcl/freight/rates/ui/FreightRatePage'));
+const VesselSchedulePage  = lazy(() => import('./domains/tcl/freight/schedules/ui/VesselSchedulePage'));
+
+// TCL — 선적 트랙킹
+const TrackingPage        = lazy(() => import('./domains/tcl/tracking/ui/TrackingPage'));
+
+// TCL — AI 챗봇
+const ChatbotPage         = lazy(() => import('./domains/tcl/chatbot/ui/ChatbotPage'));
+
+// TCL — 어드민
+const TaskManagementPage  = lazy(() => import('./domains/tcl/admin/tasks/ui/TaskManagementPage'));
+const SchedulerStatusPage = lazy(() => import('./domains/tcl/admin/scheduler/ui/SchedulerStatusPage'));
 
 // Test
 const GridTestPage = lazy(() => import('./domains/test/ui/GridTestPage'));
@@ -180,59 +154,21 @@ const pathToMenuCode: Record<string, string> = {
   '/system/ui-settings':      'SM0080',
   '/system/common-codes':     'SM0090',
   '/system/i18n':             'SM0100',
-  // 생산관리
-  '/production/plan':         'PM0010',
-  '/production/order':        'PM0020',
-  '/production/daily-plan':   'PM0030',
-  '/production/aps':           'PM0040',
-  '/production/aps/capacity':  'PM0041',
-  '/production/aps/takt':      'PM0042',
-  '/production/aps/gantt':     'PM0043',
-  '/production/shipment-plan': 'PM0050',
-  // 전자결재
-  '/approval':                'EA0010',
-  '/approval/new':            'EA0020',
-  '/approval/lines':          'EA0030',
-  '/approval/status':         'EA0040',
-  // 기준정보관리
-  '/master/customer':             'MM0010',
-  // '/master/supplier': 'MM0020', — 협력사관리로 통합
-  '/master/standard-time':        'MM0030',
-  '/master/process-chemical':     'MM0040',
-  '/master/equipment':            'MM0050',
-  '/master/raw-material':         'MM0060',
-  '/master/product':              'MM0070',
-  '/master/production-rate':      'MM0080',
-  '/master/quality-standard':     'MM0090',
-  '/master/quality-spec':         'MM0100',
-  '/master/appearance-inspection':'MM0110',
-  '/master/partner':             'MM0120',
-  // 유틸리티 (전자결재 하위)
+  // 기준정보관리 — TCL 유지 항목
+  '/master/customer':          'MM0010',
+  '/master/standard-time':     'MM0030',
+  '/master/partner':           'MM0120',
+  // 유틸리티
   '/utility/receipt-ocr':     'UT0010',
   '/utility/reports':         'UT0020',
   '/utility/excel-convert':   'UT0030',
-  // 문서관리 (전자결재 하위)
+  // 문서관리
   '/document/drawing':        'DOC0010',
   '/document/sop':            'DOC0020',
   '/document/certificate':    'DOC0030',
   '/document/technical':      'DOC0040',
   '/document/template':       'DOC0050',
   '/document/periodic':       'DOC0060',
-  // 이메일관리
-  '/email/list':                      'EM0010',
-  '/email/settings/labels':           'EM0020',
-  '/email/settings/customer-mapping': 'EM0030',
-  '/email/settings/oauth':            'EM0040',
-  '/email/settings/ai-usage':         'EM0050',
-  // 자재관리
-  '/warehouse/pre-inbound':   'WH0010',
-  // 개발도구
-  '/test/components':         'TS0010',
-  '/test/template-l1a':       'TS0020',
-  '/test/template-l1b':       'TS0030',
-  '/test/template-l2':        'TS0040',
-  '/test/template-t03':       'TS0050',
-  '/test/template-t05':       'TS0060',
   // 설비기술
   '/et/maintenance':          'ET0010',
   '/et/inspection':           'ET0020',
@@ -245,17 +181,28 @@ const pathToMenuCode: Record<string, string> = {
   '/et/mttr':                 'ET0080',
   '/et/operation-plan':       'ET0110',
   '/et/dashboard':            'ET0120',
-  // AAS/OPC-UA
-  '/aas/modeling':            'AA0010',
-  '/aas/instances':           'AA0020',
-  '/test/asset-instance-ui':  'AA0021',
-  '/aas/collection':          'AA0030',
-  '/aas/connection':          'AA0040',
-  '/aas/collection-items':    'AA0031',
-  '/test/aas-linkage-ui':     'AA0060',
-  '/opcua/gateway':           'AA0070',
-  '/aas/monitor':             'AA0080',
-  '/aas/pipeline-monitor':   'AA0090',
+  // TCL — 이메일 자동화
+  '/email/dashboard': 'EM0010',
+  '/email/search':    'EM0020',
+  '/email/accounts':  'EM0030',
+  '/email/rules':     'EM0040',
+  // TCL — 운임·스케줄
+  '/freight/rates':     'FR0010',
+  '/freight/schedules': 'FR0020',
+  // TCL — 선적 트랙킹
+  '/tracking': 'TK0010',
+  // TCL — AI 챗봇
+  '/chatbot': 'CB0010',
+  // TCL — 어드민
+  '/admin/tasks':     'AD0010',
+  '/admin/scheduler': 'AD0020',
+  // 개발도구
+  '/test/components':         'TS0010',
+  '/test/template-l1a':       'TS0020',
+  '/test/template-l1b':       'TS0030',
+  '/test/template-l2':        'TS0040',
+  '/test/template-t03':       'TS0050',
+  '/test/template-t05':       'TS0060',
 };
 
 /** ToastProvider 내부에서 notify/errorHistory/setErrorPanelOpen을 useNotifyStore에 등록 — peakmate-core에서 사용 가능 */
@@ -320,44 +267,12 @@ function App() {
                     <Route path="/system/common-codes" element={<CommonCodePage />} />
                     <Route path="/system/i18n" element={<I18nManagementPage />} />
 
-                    {/* Production Management */}
-                    <Route path="/production/plan" element={<ProductionPlanPage />} />
-                    <Route path="/production/order" element={<OrderRegistrationPage />} />
-                    <Route path="/production/daily-plan" element={<DailyProductionPlanPage />} />
-                    <Route path="/production/aps" element={<ApsPage />} />
-                    <Route path="/production/aps/capacity" element={<ApsCapacitySlotPage />} />
-                    <Route path="/production/aps/takt" element={<ApsTaktTimePage />} />
-                    <Route path="/production/aps/gantt" element={<ApsGanttPage />} />
-                    <Route path="/production/shipment-plan" element={<ShipmentPlanPage />} />
-
-                    {/* 기준정보관리 */}
+                    {/* 기준정보관리 — TCL 유지 항목 */}
                     <Route path="/master/customer" element={<CustomerPage />} />
-                    {/* /master/supplier: 협력사관리로 통합 */}
                     <Route path="/master/standard-time" element={<StandardTimePage />} />
-                    <Route path="/master/process-chemical" element={<ProcessChemicalPage />} />
-                    <Route path="/master/equipment" element={<EquipmentPage />} />
-                    <Route path="/master/raw-material" element={<RawMaterialPage />} />
-                    <Route path="/master/product" element={<ProductPage />} />
-                    <Route path="/master/production-rate" element={<ProductionRatePage />} />
-                    <Route path="/master/quality-standard" element={<QualityStandardPage />} />
-                    <Route path="/master/quality-spec" element={<QualitySpecPage />} />
-                    <Route path="/master/appearance-inspection" element={<AppearanceInspectionPage />} />
                     <Route path="/master/partner" element={<PartnerPage />} />
 
-                    {/* 이메일관리 */}
-                    <Route path="/email/list" element={<EmailListPage />} />
-                    <Route path="/email/settings/labels" element={<LabelMappingPage />} />
-                    <Route path="/email/settings/customer-mapping" element={<CustomerMappingPage />} />
-                    <Route path="/email/settings/oauth" element={<OauthSettingPage />} />
-                    <Route path="/email/settings/ai-usage" element={<AiUsagePage />} />
-
-                    {/* 자재관리 */}
-                    <Route path="/warehouse/pre-inbound" element={<PreInboundPage />} />
-
-                    {/* 전자결재 */}
-                    <Route path="/approval/lines" element={<ApprovalLinePage />} />
-                    <Route path="/approval/status" element={<ApprovalStatusPage />} />
-                    <Route path="/approval/*" element={<ApprovalPage />} />
+                    {/* 유틸리티 */}
                     <Route path="/utility/receipt-ocr" element={<ReceiptOcrPage />} />
                     <Route path="/utility/reports" element={<ReportPage />} />
                     <Route path="/utility/excel-convert" element={<ExcelConvertPage />} />
@@ -383,17 +298,25 @@ function App() {
                     <Route path="/et/operation-plan" element={<EquipOperationPlanPage />} />
                     <Route path="/et/dashboard" element={<EquipDashboardPage />} />
 
-                    {/* AAS/OPC-UA */}
-                    <Route path="/aas/modeling" element={<AasModelingPage />} />
-                    <Route path="/aas/instances" element={<AasInstancesPage />} />
-                    <Route path="/test/asset-instance-ui" element={<AasInstancesOldPage />} />
-                    <Route path="/aas/collection" element={<AasCollectionPage />} />
-                    <Route path="/aas/connection" element={<AasConnectionPage />} />
-                    <Route path="/aas/collection-items" element={<AasDataPointPage />} />
-                    <Route path="/test/aas-linkage-ui" element={<AasLinkagePage />} />
-                    <Route path="/opcua/gateway" element={<AasGatewayPage />} />
-                    <Route path="/aas/monitor" element={<AasMonitorPage />} />
-                    <Route path="/aas/pipeline-monitor" element={<AasPipelineMonitorPage />} />
+                    {/* TCL — 이메일 자동화 */}
+                    <Route path="/email/dashboard" element={<EmailDashboardPage />} />
+                    <Route path="/email/search"    element={<EmailSearchPage />} />
+                    <Route path="/email/accounts"  element={<ImapAccountPage />} />
+                    <Route path="/email/rules"     element={<AssignmentRulePage />} />
+
+                    {/* TCL — 운임·스케줄 */}
+                    <Route path="/freight/rates"     element={<FreightRatePage />} />
+                    <Route path="/freight/schedules" element={<VesselSchedulePage />} />
+
+                    {/* TCL — 선적 트랙킹 */}
+                    <Route path="/tracking" element={<TrackingPage />} />
+
+                    {/* TCL — AI 챗봇 */}
+                    <Route path="/chatbot" element={<ChatbotPage />} />
+
+                    {/* TCL — 어드민 */}
+                    <Route path="/admin/tasks"     element={<TaskManagementPage />} />
+                    <Route path="/admin/scheduler" element={<SchedulerStatusPage />} />
 
                     {/* Test */}
                     <Route path="/test/grid" element={<GridTestPage />} />

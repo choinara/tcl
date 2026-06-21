@@ -80,11 +80,11 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 6182,
+      port: 5182,
       host: '0.0.0.0',
       proxy: {
         '/api': {
-          target: 'http://localhost:9096',
+          target: 'http://localhost:8096',
           changeOrigin: true,
         },
       },
