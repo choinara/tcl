@@ -6,6 +6,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { usePermission } from '@/hooks/usePermission';
 import { useToast } from '@/shared/components/toast/ToastProvider';
 import { authFetch } from '@/lib/api';
+import { useCommonCodes } from '@/hooks/useCommonCodes';
 
 interface EmailMessage {
   id: number;
@@ -16,6 +17,7 @@ interface EmailMessage {
   processingStatus: string;
   classificationPurpose: string | null;
   classificationConfidence: number | null;
+  classificationSummary: string | null;
   customerName: string | null;
   partnerName: string | null;
   sizeBytes: number | null;
@@ -30,18 +32,11 @@ const STATUS_COLOR: Record<string, string> = {
   REJECTED: '#ef4444',
 };
 
-const PURPOSE_LABEL: Record<string, string> = {
-  QUOTATION: '견적',
-  EXPORT_SHIPPING: '선적',
-  SPARE_PARTS: '부품',
-  MAINTENANCE: '유지보수',
-  OTHER: '기타',
-};
-
 export default function EmailListPage() {
   const { t } = useTranslation();
   const perm = usePermission('EM0010');
   const { notify } = useToast();
+  const { allCodes } = useCommonCodes('EMAIL_PURPOSE');
 
   const [statusFilter, setStatusFilter] = useState('');
   const [purposeFilter, setPurposeFilter] = useState('');
@@ -49,6 +44,8 @@ export default function EmailListPage() {
   const [refetchTrigger, setRefetchTrigger] = useState(0);
   const [importing, setImporting] = useState(false);
   const [classifying, setClassifying] = useState(false);
+
+  const purposeCodes = allCodes['EMAIL_PURPOSE'] ?? [];
 
   const extraParams = useMemo(() => ({
     processingStatus: statusFilter || undefined,
@@ -107,11 +104,11 @@ export default function EmailListPage() {
     {
       field: 'classificationPurpose',
       headerName: '분류',
-      width: 90,
+      width: 100,
       cellStyle: { textAlign: 'center' },
       cellRenderer: (p: { value: string | null }) => {
-        const label = PURPOSE_LABEL[p.value ?? ''] ?? p.value ?? '-';
-        return <span title={p.value ?? ''}>{label}</span>;
+        const codeName = purposeCodes.find(c => c.code === p.value)?.codeName ?? p.value ?? '-';
+        return <span title={p.value ?? ''}>{codeName}</span>;
       },
     },
     {
@@ -121,6 +118,14 @@ export default function EmailListPage() {
       cellStyle: { textAlign: 'right' },
       cellRenderer: (p: { value: number | null }) =>
         p.value != null ? `${(Number(p.value) * 100).toFixed(0)}%` : '-',
+    },
+    {
+      field: 'classificationSummary',
+      headerName: 'AI 요약',
+      flex: 1,
+      minWidth: 160,
+      cellRenderer: (p: { value: string | null }) =>
+        p.value ? <span title={p.value}>{p.value}</span> : '-',
     },
     {
       field: 'processingStatus',
@@ -149,7 +154,7 @@ export default function EmailListPage() {
       cellRenderer: (p: { value: number | null }) =>
         p.value != null ? `${Math.round(p.value / 1024)}KB` : '-',
     },
-  ], []);
+  ], [purposeCodes]);
 
   if (perm.loading) return null;
 
@@ -160,6 +165,7 @@ export default function EmailListPage() {
         toolbarLeft={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <PageTitle title={t('menu.EM0010', '이메일목록')} menuCode="EM0010" />
+            {/* statusFilter: 시스템 내부 처리상태 enum — Rule 8-5 공통코드 전환 제외 */}
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
@@ -172,17 +178,16 @@ export default function EmailListPage() {
               <option value="APPROVED">APPROVED</option>
               <option value="REJECTED">REJECTED</option>
             </select>
+            {/* purposeFilter: 공통코드 EMAIL_PURPOSE 사용 (Rule 8-5) */}
             <select
               value={purposeFilter}
               onChange={e => setPurposeFilter(e.target.value)}
               style={{ padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 13 }}
             >
               <option value="">전체 분류</option>
-              <option value="QUOTATION">견적(QUOTATION)</option>
-              <option value="EXPORT_SHIPPING">선적(EXPORT_SHIPPING)</option>
-              <option value="SPARE_PARTS">부품(SPARE_PARTS)</option>
-              <option value="MAINTENANCE">유지보수(MAINTENANCE)</option>
-              <option value="OTHER">기타(OTHER)</option>
+              {purposeCodes.map(c => (
+                <option key={c.code} value={c.code}>{c.codeName}({c.code})</option>
+              ))}
             </select>
             <input
               type="text"

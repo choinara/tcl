@@ -79,6 +79,9 @@ public class EmailMessage extends AuditableEntity {
     @Column(name = "classification_confidence", precision = 4, scale = 3)
     private BigDecimal classificationConfidence;
 
+    @Column(name = "classification_summary", length = 200)
+    private String classificationSummary;
+
     @Column(name = "ai_processed_at")
     private OffsetDateTime aiProcessedAt;
 
@@ -133,12 +136,13 @@ public class EmailMessage extends AuditableEntity {
      * AuditableEntity의 자동 관리 대상(@CreatedDate/@LastModifiedDate)과 다르다.
      * 따라서 OffsetDateTime.now() 수동 호출이 적절하다. (Rule 8-1 예외)
      */
-    public void markClassified(String purpose, BigDecimal confidence, String customerCode,
-                                String customerName, String partnerCode, String partnerName,
-                                Long assigneeUserId) {
+    public void markClassified(String purpose, BigDecimal confidence, String summary,
+                                String customerCode, String customerName,
+                                String partnerCode, String partnerName, Long assigneeUserId) {
         this.processingStatus = "CLASSIFIED";
         this.classificationPurpose = purpose;
         this.classificationConfidence = confidence;
+        this.classificationSummary = summary;
         this.customerCode = customerCode;
         this.customerName = customerName;
         this.partnerCode = partnerCode;
@@ -151,10 +155,11 @@ public class EmailMessage extends AuditableEntity {
      * 신뢰도 미달 또는 미매핑 라벨 -- 미배정 큐로 이동.
      * aiProcessedAt은 비즈니스 타임스탬프 (Rule 8-1 예외).
      */
-    public void markUnassigned(String purpose, BigDecimal confidence) {
+    public void markUnassigned(String purpose, BigDecimal confidence, String summary) {
         this.processingStatus = "UNASSIGNED";
         this.classificationPurpose = purpose;
         this.classificationConfidence = confidence;
+        this.classificationSummary = summary;
         this.aiProcessedAt = OffsetDateTime.now();
     }
 

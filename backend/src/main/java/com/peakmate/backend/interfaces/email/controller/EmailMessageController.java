@@ -61,6 +61,7 @@ public class EmailMessageController {
         map.put("processingStatus", m.getProcessingStatus());
         map.put("classificationPurpose", m.getClassificationPurpose());
         map.put("classificationConfidence", m.getClassificationConfidence());
+        map.put("classificationSummary", m.getClassificationSummary());
         map.put("customerCode", m.getCustomerCode());
         map.put("customerName", m.getCustomerName());
         map.put("partnerName", m.getPartnerName());
