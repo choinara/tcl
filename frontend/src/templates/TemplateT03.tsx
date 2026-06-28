@@ -14,11 +14,11 @@
  */
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import type { ColDef, ColGroupDef } from 'ag-grid-community';
+import type { ColDef, ColGroupDef, CellStyle } from 'ag-grid-community';
 import { useTranslation } from 'react-i18next';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakEditGrid } from '@/components/grid';
 import type { PeakEditGridRef } from '@/components/grid';
@@ -113,8 +113,8 @@ function buildMonthColumnGroup(
             : col.dow === 6
               ? 't03-header-saturday'
               : '',
-          cellStyle: () =>
-            col.isWeekend ? { backgroundColor: '#fef3e8' } : {},
+          cellStyle: (): CellStyle | null =>
+            col.isWeekend ? { backgroundColor: '#fef3e8' } : null,
           valueFormatter: (p) => {
             if (p.value == null || p.value === '') return '';
             const n = Number(p.value);

@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import type { ApiResponse } from '@/components/grid/types';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import {
   LayoutDashboard, CalendarDays, ClipboardList, Factory, Settings,

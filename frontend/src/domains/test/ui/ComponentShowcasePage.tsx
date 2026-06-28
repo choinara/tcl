@@ -3,7 +3,7 @@ import type { ColDef } from 'ag-grid-community';
 import { usePermission } from '@/hooks/usePermission';
 import { useDateRange } from '@/hooks/useDateRange';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 // Layout
 import { PageFilterShell } from '@/components/layout/PageFilterShell';

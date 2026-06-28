@@ -7,10 +7,10 @@
  *       마스터 그리드 orderNo 컬럼의 cellRenderer에서 클릭 이벤트를 처리한다.
  */
 import { useState, useMemo, useCallback } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, CellStyle } from 'ag-grid-community';
 import { useTranslation } from 'react-i18next';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakEditGrid } from '@/components/grid';
 import { YearMonthRangeSearchBar } from '@/components/ui/YearMonthRangeSearchBar';
@@ -117,10 +117,10 @@ export default function TemplateL2DemoPage() {
     { field: 'totalQty',  headerName: '수량',     width: 90,  editable: false, type: 'numericColumn' },
     { field: 'status', headerName: '상태', width: 90, editable: false,
       valueFormatter: (p) => STATUS_OPTIONS.find((o) => o.value === p.value)?.label ?? String(p.value ?? ''),
-      cellStyle: (p) => {
+      cellStyle: (p): CellStyle | null => {
         if (p.value === 'DONE') return { color: '#64748b' };
         if (p.value === 'PROGRESS') return { color: '#2563eb', fontWeight: 600 };
-        return {};
+        return null;
       },
     },
   ], [handleSelectOrder]);

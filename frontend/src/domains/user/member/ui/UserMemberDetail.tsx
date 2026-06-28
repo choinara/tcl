@@ -15,7 +15,7 @@ export const UserMemberDetail = () => {
 
   const { data: record } = useQuery({
     queryKey: ['admin-users', id],
-    queryFn: async () => { const res = await api.get<any>(`/admin/users/${id}`); return res.data as AdminUser; },
+    queryFn: async () => { const res = await api.get<AdminUser>(`/admin/users/${id}`); return res.data; },
     enabled: !!id,
   });
 

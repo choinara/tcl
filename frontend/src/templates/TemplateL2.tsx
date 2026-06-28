@@ -25,7 +25,7 @@ import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { useDateRange } from '@/hooks/useDateRange';
 import { useCommonCodes } from '@/hooks/useCommonCodes';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
 import { PeakEditGrid } from '@/components/grid';

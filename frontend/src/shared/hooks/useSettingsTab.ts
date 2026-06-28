@@ -56,10 +56,11 @@ export function useSettingsTab<T extends Record<string, unknown>>({
   });
 
   const formMethods = useForm<T>({ defaultValues: defaultValues as Parameters<typeof useForm<T>>[0]['defaultValues'] });
+  const { reset } = formMethods;
 
   useEffect(() => {
-    if (settings) formMethods.reset(settings as Parameters<typeof formMethods.reset>[0]);
-  }, [settings, formMethods.reset]);
+    if (settings) reset(settings as Parameters<typeof reset>[0]);
+  }, [settings, reset]);
 
   const onSubmit = (data: T) => save(data);
 

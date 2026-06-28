@@ -9,7 +9,7 @@ export default function EmailSearchPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="IMAP으로 수신된 전체 이메일을 AI 분류 카테고리·기간·발신자·키워드로 검색하고, pgvector RAG 기반 유사 이메일을 함께 조회하는 통합 이메일 검색 화면"
         features={[

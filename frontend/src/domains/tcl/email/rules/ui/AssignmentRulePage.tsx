@@ -9,7 +9,7 @@ export default function AssignmentRulePage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="AI 분류 카테고리별 담당자 배정 룰을 관리하고, 키워드·발신자 기반 수동 오버라이드 규칙 및 Teams Webhook 알림 대상을 설정하는 운영 설정 화면"
         features={[

@@ -6,7 +6,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakDataGrid } from '@/components/grid';
 import type { ColDef } from 'ag-grid-community';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Department {
@@ -89,7 +89,7 @@ export default function DepartmentPage() {
         if (res.ok) { const json = await res.json(); setAllDepartments(json.data || []); }
       } catch { notify('데이터 조회에 실패했습니다', { type: 'error' }); }
     })();
-  }, [refetchTrigger]);
+  }, [refetchTrigger, notify]);
 
   const getLevelLabel = useCallback((level: number) => {
     return levelCodes.find(c => c.code === String(level))?.codeName || `L${level}`;
@@ -104,46 +104,6 @@ export default function DepartmentPage() {
     if (!parentId) return '';
     return allDepartments.find(d => d.id === parentId)?.deptName || '';
   }, [allDepartments]);
-
-  const columns = useMemo<ColDef<Department>[]>(() => [
-    { field: 'deptCode', headerName: '부서코드', width: 120 },
-    { field: 'deptName', headerName: '부서명', width: 150 },
-    {
-      field: 'companyId', headerName: '소속회사', width: 120,
-      valueFormatter: (params) => getCompanyName(params.value),
-    },
-    {
-      field: 'deptLevel', headerName: '레벨', width: 100,
-      valueFormatter: (params) => getLevelLabel(params.value),
-    },
-    {
-      field: 'parentId', headerName: '상위부서', width: 130,
-      valueFormatter: (params) => getParentName(params.value),
-    },
-    { field: 'managerName', headerName: '부서장', width: 100 },
-    {
-      field: 'isActive', headerName: '활성', width: 70,
-      valueFormatter: (params) => params.value ? '활성' : '비활성',
-    },
-    {
-      headerName: '관리', width: 120, sortable: false,
-      cellRenderer: (params: { data: Department }) => {
-        if (!params.data) return null;
-        return (
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-            {perm.canUpdate && (
-              <button onClick={() => handleEdit(params.data)}
-                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
-            )}
-            {perm.canDelete && (
-              <button onClick={() => handleDelete(params.data)}
-                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
-            )}
-          </div>
-        );
-      },
-    },
-  ], [perm.canUpdate, perm.canDelete, getCompanyName, getLevelLabel, getParentName]);
 
   const validate = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
@@ -209,7 +169,7 @@ export default function DepartmentPage() {
     } finally {
       setSaving(false);
     }
-  }, [form, selected, handleClose, validate]);
+  }, [form, selected, handleClose, validate, notify]);
 
   const handleDelete = useCallback(async (dept: Department) => {
     if (!await confirmDialog('삭제하시겠습니까?')) return;
@@ -221,7 +181,47 @@ export default function DepartmentPage() {
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [notify]);
+  }, [notify, confirmDialog]);
+
+  const columns = useMemo<ColDef<Department>[]>(() => [
+    { field: 'deptCode', headerName: '부서코드', width: 120 },
+    { field: 'deptName', headerName: '부서명', width: 150 },
+    {
+      field: 'companyId', headerName: '소속회사', width: 120,
+      valueFormatter: (params) => getCompanyName(params.value),
+    },
+    {
+      field: 'deptLevel', headerName: '레벨', width: 100,
+      valueFormatter: (params) => getLevelLabel(params.value),
+    },
+    {
+      field: 'parentId', headerName: '상위부서', width: 130,
+      valueFormatter: (params) => getParentName(params.value),
+    },
+    { field: 'managerName', headerName: '부서장', width: 100 },
+    {
+      field: 'isActive', headerName: '활성', width: 70,
+      valueFormatter: (params) => params.value ? '활성' : '비활성',
+    },
+    {
+      headerName: '관리', width: 120, sortable: false,
+      cellRenderer: (params: { data: Department }) => {
+        if (!params.data) return null;
+        return (
+          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+            {perm.canUpdate && (
+              <button onClick={() => handleEdit(params.data)}
+                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
+            )}
+            {perm.canDelete && (
+              <button onClick={() => handleDelete(params.data)}
+                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
+            )}
+          </div>
+        );
+      },
+    },
+  ], [perm.canUpdate, perm.canDelete, getCompanyName, getLevelLabel, getParentName, handleEdit, handleDelete]);
 
   const f = (field: keyof DepartmentForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));

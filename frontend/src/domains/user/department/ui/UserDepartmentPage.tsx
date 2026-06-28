@@ -5,7 +5,7 @@ import { PageHeader } from '@/shared/components/header';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import { DepartmentTree } from './components/DepartmentTree';
 import { DepartmentForm } from './components/DepartmentForm';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import { api } from '@/lib/api';
 import type { Department, DepartmentFormData } from '../types/department';
@@ -19,7 +19,7 @@ export const UserDepartmentPage = () => {
 
   const { data: departments = [] } = useQuery({
     queryKey: ['departments'],
-    queryFn: async () => { const res = await api.get<any>('/admin/departments'); return (res.data ?? []) as Department[]; },
+    queryFn: async () => { const res = await api.get<Department[]>('/admin/departments'); return (res.data ?? []) as Department[]; },
   });
 
   const { mutate: saveDept, isPending } = useMutation({
@@ -31,7 +31,7 @@ export const UserDepartmentPage = () => {
       notify('부서가 저장되었습니다', { type: 'success' });
       qc.invalidateQueries({ queryKey: ['departments'] });
     },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const { mutate: deleteDept } = useMutation({
@@ -41,7 +41,7 @@ export const UserDepartmentPage = () => {
       setSelectedDept(null);
       qc.invalidateQueries({ queryKey: ['departments'] });
     },
-    onError: (err: any) => { notify(`삭제 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`삭제 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const handleSave = (data: DepartmentFormData) => {

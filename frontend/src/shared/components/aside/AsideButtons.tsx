@@ -1,12 +1,11 @@
-import React from 'react';
 import { History, StickyNote } from 'lucide-react';
 import { GhostButton } from '../button/CustomButton';
 
 export type AsideType = 'history' | 'memo';
 
 interface AsideButtonProps {
-  record: any;
-  onOpen: (type: AsideType, record: any) => void;
+  record: Record<string, unknown>;
+  onOpen: (type: AsideType, record: Record<string, unknown>) => void;
 }
 
 export const HistoryButton = ({ record, onOpen }: AsideButtonProps) => (

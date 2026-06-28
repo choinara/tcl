@@ -8,9 +8,9 @@ import { CreateCardWrapper } from '@/shared/components/card/CreateCardWrapper';
 import { PageHeader } from '@/shared/components/header';
 import Input from '@/shared/components/input/Input';
 import { CustomRadio } from '@/shared/components/radio/radio';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
-import type { AdminUserFormData } from '../types/adminUser';
+import type { AdminUser, AdminUserFormData } from '../types/adminUser';
 
 const STATUS_OPTIONS = [
   { value: 'ACTIVE', label: '활성' },
@@ -24,17 +24,17 @@ export const UserMemberEdit = () => {
 
   const { data: record } = useQuery({
     queryKey: ['admin-users', id],
-    queryFn: async () => { const res = await api.get<any>(`/admin/users/${id}`); return res.data; },
+    queryFn: async () => { const res = await api.get<AdminUser>(`/admin/users/${id}`); return res.data; },
     enabled: !!id,
   });
 
   const { mutate: updateUser, isPending: isLoading } = useMutation({
-    mutationFn: (data: any) => api.put(`/admin/users/${id}`, data),
+    mutationFn: (data: Omit<AdminUserFormData, 'passwordConfirm'>) => api.put(`/admin/users/${id}`, data),
     onSuccess: () => {
       notify('사용자가 수정되었습니다', { type: 'success' });
       navigate(`/system/users/${id}/show`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       notify(`수정 실패: ${error.message}`, { type: 'error' });
     },
   });
@@ -76,7 +76,8 @@ export const UserMemberEdit = () => {
       notify('비밀번호가 일치하지 않습니다', { type: 'error' });
       return;
     }
-    const { passwordConfirm, ...apiData } = data;
+    const { passwordConfirm: _, ...apiData } = data;
+    void _;
     if (!apiData.password) delete apiData.password;
     updateUser(apiData);
   };

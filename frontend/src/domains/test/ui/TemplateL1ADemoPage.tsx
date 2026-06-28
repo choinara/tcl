@@ -4,10 +4,10 @@
  *              ExcelUploadButton, TemplateDownloadButton, PeakEditGrid
  */
 import { useState, useMemo, useCallback } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, CellStyle } from 'ag-grid-community';
 import { useTranslation } from 'react-i18next';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakEditGrid } from '@/components/grid';
 import { MonthRangeFilter } from '@/components/ui/MonthRangeFilter';
@@ -59,7 +59,7 @@ export default function TemplateL1ADemoPage() {
   const [process, setProcess] = useState('');
   const [type, setType] = useState('');
 
-  const [data, setData] = useState<Record<string, unknown>[]>(MOCK_DATA);
+  const [data] = useState<Record<string, unknown>[]>(MOCK_DATA);
 
   const displayData = useMemo(
     () => data.filter((r) => {
@@ -90,7 +90,7 @@ export default function TemplateL1ADemoPage() {
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['Y', 'N'] },
       valueFormatter: (p) => p.value === 'Y' ? '사용' : '미사용',
-      cellStyle: (p) => p.value === 'N' ? { color: '#94a3b8' } : {},
+      cellStyle: (p): CellStyle | null => p.value === 'N' ? { color: '#94a3b8' } : null,
     },
   ], []);
 

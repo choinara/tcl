@@ -5,10 +5,9 @@
  */
 
 import { useState, useMemo, useCallback } from 'react';
-import type { ColDef, ColGroupDef } from 'ag-grid-community';
-import { useTranslation } from 'react-i18next';
+import type { ColDef, ColGroupDef, CellStyle } from 'ag-grid-community';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakEditGrid } from '@/components/grid';
 
@@ -77,8 +76,8 @@ function buildMonthColumnGroup(year: number, month: number, dayMeta: DayMeta[]):
             : col.dow === 6
               ? 't03-header-saturday'
               : '',
-          cellStyle: () =>
-            col.isWeekend ? { backgroundColor: '#fef3e8' } : {},
+          cellStyle: (): CellStyle | null =>
+            col.isWeekend ? { backgroundColor: '#fef3e8' } : null,
           valueFormatter: (p) => {
             if (p.value == null || p.value === '') return '';
             const n = Number(p.value);
@@ -137,7 +136,6 @@ function buildMockData(year: number, month: number): GridRow[] {
 /* ── 컴포넌트 ── */
 
 export default function TemplateT03DemoPage() {
-  const { t } = useTranslation();
   const { notify } = useToast();
   const perm = usePermission(MENU_CODE);
 
@@ -165,7 +163,7 @@ export default function TemplateT03DemoPage() {
       { field: 'productName', headerName: '제품명', width: 110, pinned: 'left', editable: false },
       {
         field: 'planType', headerName: '구분', width: 65, pinned: 'left', editable: false,
-        cellStyle: (p) => (p.value === '실적' ? { color: '#16a34a' } : {}),
+        cellStyle: (p): CellStyle | null => (p.value === '실적' ? { color: '#16a34a' } : null),
       },
     ];
     const monthGroup = buildMonthColumnGroup(year, month, dayMeta);

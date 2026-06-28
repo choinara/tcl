@@ -12,7 +12,7 @@ export default function AiUsagePage() {
 
   return (
     <div>
-      <PageTitle title={t('menu.EM0050', 'AI사용량')} menuCode="EM0050" />
+      <PageTitle />
       <div style={{ padding: 20, color: '#94a3b8' }}>
         {t('common.preparing', '준비 중입니다.')}
       </div>

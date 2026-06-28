@@ -92,7 +92,7 @@ export const DepartmentForm = ({ department, onSave, onDelete, isLoading }: Depa
 
           <FormField label="정렬순서">
             <Controller name="sortOrder" control={control} render={({ field }) => (
-              <Input heightType="h40" type="number" value={String(field.value)} onChange={(e: any) => field.onChange(Number(e.target.value))} style={{ width: 120 }} />
+              <Input heightType="h40" type="number" value={String(field.value)} onChange={(val: string) => field.onChange(Number(val))} style={{ width: 120 }} />
             )} />
           </FormField>
 

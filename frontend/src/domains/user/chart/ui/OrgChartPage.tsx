@@ -3,7 +3,7 @@ import type { ColDef } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface OrgChartNode {
   id: number;
@@ -66,7 +66,7 @@ export default function OrgChartPage() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [notify]);
 
   const columns: ColDef<OrgChartNode>[] = useMemo(() => [
     { field: 'deptCode', headerName: '부서코드', width: 120 },

@@ -6,7 +6,7 @@ import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import { CustomRadio } from '@/shared/components/radio/radio';
 import Input from '@/shared/components/input/Input';
 import { CreateCardWrapper } from '@/shared/components/card/CreateCardWrapper';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { SystemSettingsData } from '../../types/systemSettings';
 
@@ -16,13 +16,13 @@ export const SystemSettingsTab = () => {
 
   const { data: settings } = useQuery({
     queryKey: ['system-settings-general'],
-    queryFn: async () => { const res = await api.get<any>('/system/settings/general'); return (res.data ?? {}) as SystemSettingsData; },
+    queryFn: async () => { const res = await api.get<SystemSettingsData>('/system/settings/general'); return (res.data ?? {}) as SystemSettingsData; },
   });
 
   const { mutate: save, isPending } = useMutation({
     mutationFn: (data: SystemSettingsData) => api.put('/system/settings/general', data),
     onSuccess: () => { notify('시스템 설정이 저장되었습니다', { type: 'success' }); qc.invalidateQueries({ queryKey: ['system-settings-general'] }); },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const { control, handleSubmit, reset } = useForm<SystemSettingsData>({
@@ -56,7 +56,7 @@ export const SystemSettingsTab = () => {
         </div>
         <FormField label="사이트 설명">
           <Controller name="siteDescription" control={control} render={({ field }) => (
-            <Input heightType="h40" value={field.value || ''} onChange={field.onChange} placeholder="사이트 설명 입력" type="long" style={{ flex: 1 }} />
+            <Input heightType="h40" value={field.value || ''} onChange={field.onChange} placeholder="사이트 설명 입력" layout="long" style={{ flex: 1 }} />
           )} />
         </FormField>
         <div className="flex gap-6">

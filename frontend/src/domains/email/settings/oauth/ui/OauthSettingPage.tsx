@@ -12,7 +12,7 @@ export default function OauthSettingPage() {
 
   return (
     <div>
-      <PageTitle title={t('menu.EM0040', '메일계정인증')} menuCode="EM0040" />
+      <PageTitle />
       <div style={{ padding: 20, color: '#94a3b8' }}>
         {t('common.preparing', '준비 중입니다.')}
       </div>

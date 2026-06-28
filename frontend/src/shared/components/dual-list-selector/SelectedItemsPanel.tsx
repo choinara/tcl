@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowUpToLine, ArrowUp, ArrowDown, ArrowDownToLine, Trash2 } from 'lucide-react';
 import { GhostButton } from '../button/CustomButton';
 
-export interface SelectedItemsPanelProps<T extends Record<string, any>> {
+export interface SelectedItemsPanelProps<T extends Record<string, unknown>> {
   items: T[];
   getItemId: (item: T) => number;
   selectedIds: Set<number>;
@@ -51,7 +51,7 @@ const ReorderActionButtons = ({
 
 export const SelectedItemsPanel = React.forwardRef<
   HTMLDivElement,
-  SelectedItemsPanelProps<any>
+  SelectedItemsPanelProps<Record<string, unknown>>
 >(
   (
     {
@@ -62,12 +62,13 @@ export const SelectedItemsPanel = React.forwardRef<
       onRemove,
       onReorder,
       children,
-      resource,
+      resource: _res,
       emptyMessage = '선택된 항목이 없습니다',
       empty,
     },
     ref
   ) => {
+    void _res;
     const handleToggleItem = (id: number) => {
       const newIds = new Set(selectedIds);
       if (newIds.has(id)) newIds.delete(id);
@@ -166,7 +167,7 @@ export const SelectedItemsPanel = React.forwardRef<
                   </th>
                   {React.Children.map(children, (child) => {
                     if (!React.isValidElement(child)) return null;
-                    const props = child.props as any;
+                    const props = child.props as Record<string, unknown>;
                     return (
                       <th className="px-3 py-2 text-left font-medium text-[var(--color-text-secondary)]">
                         {props.label || props.source || ''}
@@ -196,7 +197,7 @@ export const SelectedItemsPanel = React.forwardRef<
                       </td>
                       {React.Children.map(children, (child) => {
                         if (!React.isValidElement(child)) return null;
-                        const props = child.props as any;
+                        const props = child.props as Record<string, unknown>;
                         const source = props.source;
                         const render = props.render;
                         return (

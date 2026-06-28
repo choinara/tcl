@@ -6,7 +6,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakDataGrid } from '@/components/grid';
 import type { ColDef } from 'ag-grid-community';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Role {
@@ -34,30 +34,6 @@ export default function RoleManagementPage() {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [refetchTrigger, setRefetchTrigger] = useState(0);
-
-  const columns = useMemo<ColDef<Role>[]>(() => [
-    { field: 'roleCode', headerName: '역할코드', width: 160 },
-    { field: 'roleName', headerName: '역할명', width: 200 },
-    { field: 'description', headerName: '설명', flex: 1 },
-    {
-      headerName: '관리', width: 120, sortable: false,
-      cellRenderer: (params: { data: Role }) => {
-        if (!params.data) return null;
-        return (
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-            {perm.canUpdate && (
-              <button onClick={() => handleEdit(params.data)}
-                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
-            )}
-            {perm.canDelete && (
-              <button onClick={() => handleDelete(params.data)}
-                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
-            )}
-          </div>
-        );
-      },
-    },
-  ], [perm.canUpdate, perm.canDelete]);
 
   const validate = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
@@ -102,7 +78,7 @@ export default function RoleManagementPage() {
     } finally {
       setSaving(false);
     }
-  }, [form, editingId, validate]);
+  }, [form, editingId, validate, notify]);
 
   const handleDelete = useCallback(async (role: Role) => {
     if (!await confirmDialog('삭제하시겠습니까?')) return;
@@ -117,7 +93,31 @@ export default function RoleManagementPage() {
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, []);
+  }, [confirmDialog, notify]);
+
+  const columns = useMemo<ColDef<Role>[]>(() => [
+    { field: 'roleCode', headerName: '역할코드', width: 160 },
+    { field: 'roleName', headerName: '역할명', width: 200 },
+    { field: 'description', headerName: '설명', flex: 1 },
+    {
+      headerName: '관리', width: 120, sortable: false,
+      cellRenderer: (params: { data: Role }) => {
+        if (!params.data) return null;
+        return (
+          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+            {perm.canUpdate && (
+              <button onClick={() => handleEdit(params.data)}
+                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
+            )}
+            {perm.canDelete && (
+              <button onClick={() => handleDelete(params.data)}
+                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
+            )}
+          </div>
+        );
+      },
+    },
+  ], [perm.canUpdate, perm.canDelete, handleEdit, handleDelete]);
 
   return (
     <div>

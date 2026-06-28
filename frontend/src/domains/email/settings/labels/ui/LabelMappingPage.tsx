@@ -12,7 +12,7 @@ export default function LabelMappingPage() {
 
   return (
     <div>
-      <PageTitle title={t('menu.EM0020', '라벨매핑')} menuCode="EM0020" />
+      <PageTitle />
       <div style={{ padding: 20, color: '#94a3b8' }}>
         {t('common.preparing', '준비 중입니다.')}
       </div>

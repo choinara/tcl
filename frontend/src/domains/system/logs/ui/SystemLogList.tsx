@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import type { ColDef } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
 import { PageHeader } from '@/shared/components/header';
 import { SystemLogFilterForm } from '../filter/SystemLogFilterForm';
 
+interface LogFilters {
+  keyword: string;
+  logType: string;
+}
+
 export const SystemLogList = () => {
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const handleSearch = useCallback((f: LogFilters) => setFilters({ ...f }), []);
 
   const columns: ColDef[] = [
     { field: 'logId', headerName: 'No.', width: 60, cellStyle: { textAlign: 'center' } },
@@ -21,7 +27,7 @@ export const SystemLogList = () => {
   return (
     <div className="flex-1 flex flex-col bg-white">
       <PageHeader title="시스템 로그" subtitle="시스템 활동 로그를 조회합니다" />
-      <SystemLogFilterForm onSearch={setFilters} />
+      <SystemLogFilterForm onSearch={handleSearch} />
       <div className="flex-1 flex flex-col min-h-0 mt-1">
         <PeakDataGrid columns={columns} queryKey={['system-logs']} queryUrl="/system/logs" extraParams={filters} />
       </div>

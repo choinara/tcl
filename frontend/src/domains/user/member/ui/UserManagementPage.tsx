@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import type { ColDef } from 'ag-grid-community';
-import { useQueryClient } from '@tanstack/react-query';
 import { PeakDataGrid } from '@/components/grid';
 import { Modal } from '@/components/ui/Modal';
 import { FormField } from '@/components/ui/FormField';
@@ -8,7 +7,7 @@ import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface User {
   id: number;
@@ -91,7 +90,6 @@ export default function UserManagementPage() {
   const perm = usePermission('UM0010');
   const { notify } = useToast();
   const { confirm: confirmDialog, ConfirmDialog } = useConfirm();
-  const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [form, setForm] = useState<UserForm>(emptyForm);
@@ -165,7 +163,7 @@ export default function UserManagementPage() {
         notify('역할 목록 조회에 실패했습니다', { type: 'error' });
       }
     })();
-  }, []);
+  }, [notify]);
 
   const handleChange = useCallback((field: keyof UserForm, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -274,7 +272,7 @@ export default function UserManagementPage() {
     } finally {
       setSaving(false);
     }
-  }, [form, selectedUser, handleClose, validate]);
+  }, [form, selectedUser, handleClose, validate, notify]);
 
   const handleResetPassword = useCallback(async (user: User) => {
     if (!await confirmDialog(`[${user.username}] 사용자의 비밀번호를 초기화하시겠습니까?\n임시 비밀번호가 발급됩니다.`)) return;
@@ -298,7 +296,7 @@ export default function UserManagementPage() {
     } catch (err) {
       notify('비밀번호 초기화 실패: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [notify]);
+  }, [notify, confirmDialog]);
 
   const handleViewPii = useCallback(async (user: User) => {
     try {
@@ -395,7 +393,7 @@ export default function UserManagementPage() {
       colId: 'actions',
       headerName: '관리',
       width: 220,
-      cellRenderer: (p: any) => (
+      cellRenderer: (p: { data: User }) => (
         <div style={{ display: 'flex', gap: 4 }}>
           <button
             className="btn-edit"
@@ -433,7 +431,7 @@ export default function UserManagementPage() {
         </div>
       ),
     },
-  ], [departments, positions, companies, partners, handleEdit, handleViewPii, perm.canUpdate, perm.canViewPii]);
+  ], [departments, positions, companies, partners, handleEdit, handleViewPii, handleResetPassword, perm.canUpdate, perm.canViewPii]);
 
   const extraParams = useMemo(() => {
     if (userTypeFilter) return { userType: userTypeFilter };

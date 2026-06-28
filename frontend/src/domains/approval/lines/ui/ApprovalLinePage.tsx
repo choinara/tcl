@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface FavoriteLine {

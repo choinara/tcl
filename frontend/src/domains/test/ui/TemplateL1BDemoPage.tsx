@@ -11,11 +11,11 @@
  *       클릭 이벤트를 처리하여 selectedCustomer 상태를 갱신한다.
  */
 import { useState, useMemo, useCallback } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, CellStyle } from 'ag-grid-community';
 import { useTranslation } from 'react-i18next';
 import { usePermission } from '@/hooks/usePermission';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakEditGrid } from '@/components/grid';
 import { Modal } from '@/components/ui/Modal';
@@ -178,7 +178,7 @@ export default function TemplateL1BDemoPage() {
     { field: 'contact',  headerName: '연락처',  width: 140, editable: false },
     { field: 'isActive', headerName: '상태', width: 70, editable: false,
       valueFormatter: (p) => p.value === 'Y' ? '활성' : '비활성',
-      cellStyle: (p) => p.value === 'N' ? { color: '#94a3b8' } : {},
+      cellStyle: (p): CellStyle | null => p.value === 'N' ? { color: '#94a3b8' } : null,
     },
     {
       colId: 'actions', headerName: '관리', width: 110, sortable: false,

@@ -21,7 +21,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { useDateRange } from '@/hooks/useDateRange';
 import { useCommonCodes } from '@/hooks/useCommonCodes';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
 import { Modal } from '@/components/ui/Modal';

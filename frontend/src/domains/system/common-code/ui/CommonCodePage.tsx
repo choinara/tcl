@@ -7,7 +7,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakEditGrid } from '@/components/grid';
 import type { PeakEditGridRef } from '@/components/grid';
 import type { ColDef } from 'ag-grid-community';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 /* ── Types ── */
@@ -84,7 +84,7 @@ export default function CommonCodePage() {
     } catch {
       notify('공통코드 조회에 실패했습니다', { type: 'error' });
     }
-  }, []);
+  }, [notify]);
 
   useEffect(() => { fetchGroups(); }, [fetchGroups]);
 
@@ -99,7 +99,7 @@ export default function CommonCodePage() {
     } catch {
       notify('공통코드 조회에 실패했습니다', { type: 'error' });
     }
-  }, []);
+  }, [notify]);
 
   const handleSelectGroup = useCallback((group: CodeGroup) => {
     setSelectedGroup(group);
@@ -178,7 +178,7 @@ export default function CommonCodePage() {
     } catch (err) {
       notify('저장 실패: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     } finally { setSavingGroup(false); }
-  }, [groupForm, editingGroup, fetchGroups, validateGroup, selectedGroup]);
+  }, [groupForm, editingGroup, fetchGroups, validateGroup, selectedGroup, notify]);
 
   const handleDeleteGroup = useCallback(async (group: CodeGroup) => {
     if (!await confirmDialog(`그룹 "${group.groupName}"을 삭제하시겠습니까?`)) return;
@@ -195,7 +195,7 @@ export default function CommonCodePage() {
     } catch (err) {
       notify('삭제 실패: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [fetchGroups, selectedGroup, notify]);
+  }, [fetchGroups, selectedGroup, notify, confirmDialog]);
 
   // ── EditGrid batch save ──
   const handleBatchSave = useCallback(async (rows: { _rowState: string; [key: string]: unknown }[]) => {

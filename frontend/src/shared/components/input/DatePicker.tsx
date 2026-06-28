@@ -109,7 +109,7 @@ export const DateRangePicker = ({
 }: DateRangePickerProps) => {
   const [tempStartDate, setTempStartDate] = useState<Date | null>(startDate ?? null);
   const [tempEndDate, setTempEndDate] = useState<Date | null>(endDate ?? null);
-  const datePickerRef = useRef<any>(null);
+  const datePickerRef = useRef<{ setOpen: (open: boolean) => void } | null>(null);
 
   const handleCalendarOpen = () => {
     setTempStartDate(startDate ?? null);

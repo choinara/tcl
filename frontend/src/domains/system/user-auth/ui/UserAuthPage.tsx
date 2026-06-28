@@ -6,7 +6,7 @@ import { authFetch } from '@/lib/api';
 import type { ApiResponse } from '@/components/grid/types';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface UserItem {
   id: number;
@@ -241,7 +241,7 @@ export default function UserAuthPage() {
     } finally {
       setSaving(false);
     }
-  }, [selectedUserId, treeNodes, queryClient]);
+  }, [selectedUserId, treeNodes, queryClient, notify]);
 
   const leftPanel = (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

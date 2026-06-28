@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { usePermission } from '@/hooks/usePermission';
@@ -22,7 +22,7 @@ export default function SystemLogPage() {
       field: 'logType',
       headerName: '로그유형',
       width: 100,
-      cellRenderer: (p: any) => {
+      cellRenderer: (p: ICellRendererParams<SystemLog>) => {
         const type = p.value as string;
         const colorMap: Record<string, string> = {
           LOGIN: '#3b82f6',
@@ -50,7 +50,7 @@ export default function SystemLogPage() {
       field: 'detail',
       headerName: '상세',
       width: 250,
-      cellRenderer: (p: any) => {
+      cellRenderer: (p: ICellRendererParams<SystemLog>) => {
         const detail = p.value as string;
         const truncated = detail && detail.length > 50
           ? detail.substring(0, 50) + '...'

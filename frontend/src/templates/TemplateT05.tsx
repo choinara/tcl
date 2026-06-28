@@ -38,7 +38,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 import { useTranslation } from 'react-i18next';
 import { format, addDays, startOfWeek, parseISO } from 'date-fns';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { RefreshButton } from '@/components/ui/RefreshButton';
 

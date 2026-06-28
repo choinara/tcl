@@ -5,7 +5,7 @@ import { authFetch } from '@/lib/api';
 import type { ApiResponse } from '@/components/grid/types';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface Menu {
   id: number;
@@ -228,7 +228,7 @@ export default function MenuAuthPage() {
     } finally {
       setSaving(false);
     }
-  }, [roleId, treeNodes, queryClient]);
+  }, [roleId, treeNodes, queryClient, notify]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

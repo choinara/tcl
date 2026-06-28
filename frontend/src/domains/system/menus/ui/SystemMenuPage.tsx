@@ -5,7 +5,7 @@ import { PageHeader } from '@/shared/components/header';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import { MenuTree } from './components/MenuTree';
 import { MenuForm } from './components/MenuForm';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 import { api } from '@/lib/api';
 import type { Menu, MenuFormData } from '../types/menu';
@@ -19,7 +19,7 @@ export const SystemMenuPage = () => {
 
   const { data: menus = [] } = useQuery({
     queryKey: ['system-menus'],
-    queryFn: async () => { const res = await api.get<any>('/system/menus'); return (res.data ?? []) as Menu[]; },
+    queryFn: async () => { const res = await api.get<Menu[]>('/system/menus'); return (res.data ?? []) as Menu[]; },
   });
 
   const { mutate: saveMenu, isPending } = useMutation({
@@ -31,7 +31,7 @@ export const SystemMenuPage = () => {
       notify('메뉴가 저장되었습니다', { type: 'success' });
       qc.invalidateQueries({ queryKey: ['system-menus'] });
     },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const { mutate: deleteMenu } = useMutation({
@@ -41,7 +41,7 @@ export const SystemMenuPage = () => {
       setSelectedMenu(null);
       qc.invalidateQueries({ queryKey: ['system-menus'] });
     },
-    onError: (err: any) => { notify(`삭제 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`삭제 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const handleSave = (data: MenuFormData) => {

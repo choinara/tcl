@@ -6,7 +6,7 @@ import { PageTitle } from '@/components/ui/PageTitle';
 import { usePreferenceStore } from '@/stores/usePreferenceStore';
 import type { GridFeatureToggles } from '@/components/grid/types';
 import { DEFAULT_GRID_FEATURES } from '@/components/grid/types';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface ApiKeyStatus {
@@ -25,6 +25,11 @@ interface ApiKeyDef {
 interface SecuritySettings {
   apiKeys?: ApiKeyStatus[];
   customDefs?: string;
+}
+
+interface MailTestResult {
+  message?: string;
+  success?: boolean;
 }
 
 /** 기본 제공 API 키 정의 (삭제 불가) */
@@ -681,13 +686,13 @@ function MailSettingsPanel() {
 
   useEffect(() => {
     api.get('/system/settings/mail')
-      .then((res: any) => {
-        const data = res.data || res;
+      .then((res) => {
+        const data = (res.data ?? {}) as Record<string, string>;
         setForm(prev => ({ ...prev, ...data }));
       })
       .catch(() => notify('메일 설정 조회 실패', { type: 'error' }))
       .finally(() => setLoading(false));
-  }, []);
+  }, [notify]);
 
   const handleChange = (key: string, value: string) => {
     setForm(prev => {
@@ -722,15 +727,15 @@ function MailSettingsPanel() {
   const handleTestConnection = async () => {
     setTesting(true);
     try {
-      const res: any = await api.post('/system/settings/mail/test-connection');
+      const res = await api.post<MailTestResult>('/system/settings/mail/test-connection');
       if (res.success === false) {
-        notify(res.error?.message || '연결 테스트 실패', { type: 'error' });
+        notify(res.message || '연결 테스트 실패', { type: 'error' });
       } else {
         const data = res.data;
         notify(data?.message || (data?.success ? '연결 성공' : '연결 실패'), { type: data?.success ? 'success' : 'error' });
       }
-    } catch (err: any) {
-      notify(err?.message || '연결 테스트 실패', { type: 'error' });
+    } catch (err: unknown) {
+      notify(err instanceof Error ? err.message : '연결 테스트 실패', { type: 'error' });
     } finally {
       setTesting(false);
     }
@@ -747,14 +752,14 @@ function MailSettingsPanel() {
     }
     setSendingTest(true);
     try {
-      const res: any = await api.post('/system/settings/mail/test-send', { to: testEmail });
+      const res = await api.post<MailTestResult>('/system/settings/mail/test-send', { to: testEmail });
       if (res.success === false) {
-        notify(res.error?.message || '테스트 메일 발송 실패', { type: 'error' });
+        notify(res.message || '테스트 메일 발송 실패', { type: 'error' });
       } else {
         notify(res.data?.message || '테스트 메일 발송 완료', { type: 'success' });
       }
-    } catch (err: any) {
-      notify(err?.message || '테스트 메일 발송 실패', { type: 'error' });
+    } catch (err: unknown) {
+      notify(err instanceof Error ? err.message : '테스트 메일 발송 실패', { type: 'error' });
     } finally {
       setSendingTest(false);
     }

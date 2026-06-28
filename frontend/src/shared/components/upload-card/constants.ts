@@ -4,7 +4,7 @@ import type { FileType } from './types';
 /**
  * 파일 타입별 아이콘 매핑 (Lucide)
  */
-export const FILE_TYPE_ICONS: Record<FileType, React.ComponentType<any>> = {
+export const FILE_TYPE_ICONS: Record<FileType, React.ComponentType<{ size?: number | string }>> = {
   pdf: FileText,
   musx: Music,
   mp4: Film,

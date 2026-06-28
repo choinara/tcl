@@ -7,7 +7,7 @@ import { authFetch } from '@/lib/api';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { usePermission } from '@/hooks/usePermission';
 import type { PermissionSet } from '@/stores/useAuthStore';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 /* -- Types -- */
@@ -176,7 +176,7 @@ function NotificationTab({ perm }: { perm: PermissionSet & { loading: boolean } 
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [editingId, notify]);
+  }, [editingId, notify, confirmDialog]);
 
   return (
     <>
@@ -314,7 +314,7 @@ function BulletinTab({ perm }: { perm: PermissionSet & { loading: boolean } }) {
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [editingId, notify]);
+  }, [editingId, notify, confirmDialog]);
 
   return (
     <>

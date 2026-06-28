@@ -9,7 +9,7 @@ export default function VesselSchedulePage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="Playwright 스크래핑으로 수집한 선박 스케줄(ETD/ETA)을 구간·선사·선박명 기준으로 조회하고, 스케줄 변경 감지 시 담당자에게 즉시 알림하는 화면"
         features={[

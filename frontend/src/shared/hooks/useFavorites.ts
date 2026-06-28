@@ -28,4 +28,4 @@
  *   <YourApp />
  * </FavoritesProvider>
  */
-export { useFavoritesContext as useFavorites } from '@/shared/context/FavoritesContext';
+export { useFavoritesContext as useFavorites } from '@/shared/context/useFavoritesContext';

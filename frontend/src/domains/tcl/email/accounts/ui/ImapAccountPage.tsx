@@ -9,7 +9,7 @@ export default function ImapAccountPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="이메일 자동화의 수신 창구인 IMAP 계정을 등록·관리하고, 폴링 주기 및 연결 상태를 모니터링하는 설정 화면 (복수 계정 지원)"
         features={[

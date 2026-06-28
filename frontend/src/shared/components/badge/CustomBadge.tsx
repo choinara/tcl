@@ -46,7 +46,7 @@ export const CustomBadge = ({
   label,
   backgroundColor,
   textColor,
-  borderColor,
+  borderColor: _bc,
   width,
   height,
   styleConfig,
@@ -54,8 +54,9 @@ export const CustomBadge = ({
   style,
   icon,
 }: CustomBadgeProps) => {
+  void _bc;
   const styles = styleConfig || defaultStyles;
-  const s = (styles as any)[variant] || defaultStyles[variant];
+  const s = (styles as Record<string, { bgColor: string; textColor: string; borderColor: string }>)[variant] || defaultStyles[variant];
   const bgColor = backgroundColor || s?.bgColor || '#F5F5F5';
   const txtColor = textColor || s?.textColor || '#222';
   const sz = sizePx[size];

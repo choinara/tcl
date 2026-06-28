@@ -20,6 +20,37 @@
     "baseUrl": ".",
     "paths": {
       "@peakmate/e-approval": ["../../peakmate-Util/e-approval/frontend/src/index.ts"],
+
+      /* npm package redirects — peakmate-core/src has no node_modules of its own,
+         so TypeScript cannot traverse up to frontend/node_modules when compiling
+         peakmate-core files included via the `include` array above.
+         These explicit mappings redirect all peakmate-core imports to this project's
+         node_modules, eliminating TS2307 / TS2875 cascade errors. */
+      "react": ["./node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
+      "react-dom": ["./node_modules/@types/react-dom"],
+      "react-dom/client": ["./node_modules/@types/react-dom/client.d.ts"],
+      "react-router-dom": ["./node_modules/react-router-dom"],
+      "react-i18next": ["./node_modules/react-i18next"],
+      "i18next": ["./node_modules/i18next"],
+      "i18next-browser-languagedetector": ["./node_modules/i18next-browser-languagedetector"],
+      "@tanstack/react-query": ["./node_modules/@tanstack/react-query"],
+      "zustand": ["./node_modules/zustand"],
+      "ag-grid-community": ["./node_modules/ag-grid-community"],
+      "ag-grid-react": ["./node_modules/ag-grid-react"],
+      "echarts": ["./node_modules/echarts"],
+      "echarts-for-react": ["./node_modules/echarts-for-react"],
+      "exceljs": ["./node_modules/exceljs"],
+      "file-saver": ["./node_modules/@types/file-saver"],
+      "react-datepicker": ["./node_modules/react-datepicker"],
+      "lucide-react": ["./node_modules/lucide-react"],
+      "date-fns/*": ["./node_modules/date-fns/*"],
+
+      /* peakmate-core component barrel + wildcard path aliases */
+      "@/components/error/*": ["../peakmate-core/src/components/error/*"],
+      "@/components/charts": ["../peakmate-core/src/components/charts/index.ts"],
+      "@/components/charts/*": ["../peakmate-core/src/components/charts/*"],
+      "@/components/grid": ["../peakmate-core/src/components/grid/index.ts"],
       "@/components/grid/*": ["../peakmate-core/src/components/grid/*"],
       "@/components/ui/*": ["../peakmate-core/src/components/ui/*"],
       "@/components/auth/*": ["../peakmate-core/src/components/auth/*"],

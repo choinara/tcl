@@ -9,7 +9,7 @@ export default function FreightRatePage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="Playwright 스크래핑으로 수집한 선사별 운임(FCL/LCL)과 FREIGHT_INQUIRY 이메일에서 AI 파싱한 견적 데이터를 통합하여 운임 현황과 추이를 조회하는 화면"
         features={[

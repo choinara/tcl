@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import Input from '@/shared/components/input/Input';
 import { FilterSearchButton, FilterResetButton } from '@/shared/components/button/CustomButton';
 import { LOG_FILTER_DEFAULTS, LOG_TYPE_CODES } from '../constants/logFilterDefaults';
+interface LogFilters {
+  keyword: string;
+  logType: string;
+}
 
 interface SystemLogFilterFormProps {
-  onSearch: (filters: Record<string, any>) => void;
+  onSearch: (filters: LogFilters) => void;
 }
 
 const ToggleGroup = ({ options, value, onChange }: { options: { value: string; label: string }[]; value: string; onChange: (v: string) => void }) => (
@@ -21,7 +26,7 @@ const ToggleGroup = ({ options, value, onChange }: { options: { value: string; l
 export const SystemLogFilterForm = ({ onSearch }: SystemLogFilterFormProps) => {
   const [filters, setFilters] = useState(LOG_FILTER_DEFAULTS);
 
-  const update = (key: string, value: any) => setFilters((prev: any) => ({ ...prev, [key]: value }));
+  const update = (key: keyof LogFilters, value: string) => setFilters((prev) => ({ ...prev, [key]: value }));
   const handleSearch = () => onSearch(filters);
   const handleReset = () => { setFilters(LOG_FILTER_DEFAULTS); onSearch(LOG_FILTER_DEFAULTS); };
 
@@ -30,7 +35,7 @@ export const SystemLogFilterForm = ({ onSearch }: SystemLogFilterFormProps) => {
       <div className="flex items-stretch w-full">
         <div className="flex flex-col gap-2.5 flex-1 px-3 py-2.5">
           <div className="flex gap-5 items-center">
-            <Input value={filters.keyword} onChange={(e: any) => update('keyword', e.target.value)} placeholder="사용자명 또는 액션으로 검색" heightType="h32" style={{ width: 300 }} onKeyDown={(e: any) => e.key === 'Enter' && handleSearch()} />
+            <Input value={filters.keyword} onChange={(value: string) => update('keyword', value)} placeholder="사용자명 또는 액션으로 검색" heightType="h32" style={{ width: 300 }} onKeyDown={(e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => e.key === 'Enter' && handleSearch()} />
             <ToggleGroup options={LOG_TYPE_CODES} value={filters.logType} onChange={(v) => update('logType', v)} />
           </div>
         </div>

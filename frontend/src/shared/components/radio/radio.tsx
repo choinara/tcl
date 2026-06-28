@@ -20,7 +20,7 @@ export const CustomRadio = ({ label, labelPlacement = 'end', checked, onChange, 
         onChange={onChange}
         disabled={disabled}
         name={name}
-        value={value as any}
+        value={value}
       />
       <span
         className={`inline-flex items-center justify-center rounded-full border-2 transition-colors ${

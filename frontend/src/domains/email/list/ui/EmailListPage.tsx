@@ -4,7 +4,7 @@ import type { ColDef } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { usePermission } from '@/hooks/usePermission';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { authFetch } from '@/lib/api';
 import { useCommonCodes } from '@/hooks/useCommonCodes';
 
@@ -33,7 +33,7 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function EmailListPage() {
-  const { t } = useTranslation();
+  useTranslation();
   const perm = usePermission('EM0010');
   const { notify } = useToast();
   const allCodes = useCommonCodes('EMAIL_PURPOSE');
@@ -45,7 +45,7 @@ export default function EmailListPage() {
   const [importing, setImporting] = useState(false);
   const [classifying, setClassifying] = useState(false);
 
-  const purposeCodes = allCodes['EMAIL_PURPOSE'] ?? [];
+  const purposeCodes = useMemo(() => allCodes['EMAIL_PURPOSE'] ?? [], [allCodes]);
 
   const extraParams = useMemo(() => ({
     processingStatus: statusFilter || undefined,
@@ -164,7 +164,7 @@ export default function EmailListPage() {
         hideRowNumber
         toolbarLeft={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <PageTitle title={t('menu.EM0010', '이메일목록')} menuCode="EM0010" />
+            <PageTitle />
             {/* statusFilter: 시스템 내부 처리상태 enum — Rule 8-5 공통코드 전환 제외 */}
             <select
               value={statusFilter}

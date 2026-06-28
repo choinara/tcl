@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface ReportTemplate {
   id: number;
@@ -59,7 +59,7 @@ export default function ReportPage() {
       }
     } catch { notify('보고서 조회에 실패했습니다', { type: 'error' }); }
     finally { setLoading(false); }
-  }, []);
+  }, [notify]);
 
   useEffect(() => { fetchTemplates(); }, [fetchTemplates]);
 

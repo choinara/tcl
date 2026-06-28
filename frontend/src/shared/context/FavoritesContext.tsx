@@ -1,4 +1,4 @@
-import {createContext, type ReactNode, useContext, useEffect, useState} from 'react';
+import {createContext, type ReactNode, useState} from 'react';
 
 /**
  * 즐겨찾기 상태 타입 정의
@@ -15,28 +15,24 @@ interface FavoritesContextType {
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
+// Re-assign for external hook file access
+export { FavoritesContext };
+
  /**
  * ⚠️  주의사항:
  * - Provider 내에서만 useFavoritesContext() 사용 가능
  * - Provider 외에서 사용하면 에러 발생
  */
 export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
-    // Step 1. 상태 관리
-    // favorites: 즐겨찾기된 메뉴 ID 배열
-    const [favorites, setFavorites] = useState<string[]>([]);
-
-    // Step 2. 초기화 (localStorage에서 데이터 로드)
-    // useEffect는 컴포넌트 마운트 시 1회 실행 ([] 의존성)
-    useEffect(() => {
+    // Step 1. 상태 관리 (localStorage에서 초기값 로드)
+    const [favorites, setFavorites] = useState<string[]>(() => {
         try {
             const saved = localStorage.getItem('menu_favorites');
-            if (saved) {
-                setFavorites(JSON.parse(saved));
-            }
-        } catch (e) {
-            console.error('Failed to load favorites from localStorage:', e);
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
         }
-    }, []);
+    });
 
     // Step 3. 즐겨찾기 토글 함수
     // 하위 컴포넌트에서 호출되면 모든 구독 컴포넌트에 즉시 반영됨
@@ -83,25 +79,3 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-/**
- * useFavorites 커스텀 훅
- *
- * FavoritesProvider 내에서만 사용 가능합니다.
- *
- * 반환값:
- * - favorites: 현재 즐겨찾기된 메뉴 ID 배열
- * - toggleFavorite(menuId): 특정 메뉴의 즐겨찾기 추가/제제거
- * - isFavorite(menuId): 특정 메뉴가 즐겨찾기 되어 있는지 확인
- *
- * 사용 예시:
- * const { favorites, toggleFavorite, isFavorite } = useFavoritesContext();
- */
-export const useFavoritesContext = () => {
-    const context = useContext(FavoritesContext);
-    if (!context) {
-        throw new Error(
-            'useFavoritesContext는 FavoritesProvider 내에서만 사용할 수 있습니다.'
-        );
-    }
-    return context;
-};

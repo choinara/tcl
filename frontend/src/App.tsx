@@ -11,7 +11,8 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotifyStore } from '@/stores/useNotifyStore';
 import { WorkingOverlay } from '@/components/ui/WorkingOverlay';
-import { ToastProvider, useToast } from './shared/components/toast/ToastProvider';
+import { ToastProvider } from './shared/components/toast/ToastProvider';
+import { useToast } from './shared/components/toast/useToast';
 import { menuConfig } from './config/menuConfig';
 
 // Lazy load pages

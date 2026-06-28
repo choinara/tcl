@@ -5,7 +5,7 @@ import { FormField } from '@/shared/components/form';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import Input from '@/shared/components/input/Input';
 import { CreateCardWrapper } from '@/shared/components/card/CreateCardWrapper';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { ConditionSettingsData } from '../../types/systemSettings';
 
@@ -15,13 +15,13 @@ export const ConditionSettingsTab = () => {
 
   const { data: settings } = useQuery({
     queryKey: ['system-settings-condition'],
-    queryFn: async () => { const res = await api.get<any>('/system/settings/condition'); return (res.data ?? {}) as ConditionSettingsData; },
+    queryFn: async () => { const res = await api.get<ConditionSettingsData>('/system/settings/condition'); return (res.data ?? {}) as ConditionSettingsData; },
   });
 
   const { mutate: save, isPending } = useMutation({
     mutationFn: (data: ConditionSettingsData) => api.put('/system/settings/condition', data),
     onSuccess: () => { notify('조건 설정이 저장되었습니다', { type: 'success' }); qc.invalidateQueries({ queryKey: ['system-settings-condition'] }); },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const { control, handleSubmit, reset } = useForm<ConditionSettingsData>({
@@ -37,14 +37,14 @@ export const ConditionSettingsTab = () => {
           <div className="flex-1">
             <FormField label="기본 페이지 크기">
               <Controller name="defaultPageSize" control={control} render={({ field }) => (
-                <Input heightType="h40" type="number" value={String(field.value ?? 20)} onChange={(e: any) => field.onChange(Number(e.target.value))} style={{ width: 120 }} />
+                <Input heightType="h40" type="number" value={String(field.value ?? 20)} onChange={(v: string) => field.onChange(Number(v))} style={{ width: 120 }} />
               )} />
             </FormField>
           </div>
           <div className="flex-1">
             <FormField label="최대 내보내기 행수">
               <Controller name="maxExportRows" control={control} render={({ field }) => (
-                <Input heightType="h40" type="number" value={String(field.value ?? 10000)} onChange={(e: any) => field.onChange(Number(e.target.value))} style={{ width: 120 }} />
+                <Input heightType="h40" type="number" value={String(field.value ?? 10000)} onChange={(v: string) => field.onChange(Number(v))} style={{ width: 120 }} />
               )} />
             </FormField>
           </div>
@@ -53,7 +53,7 @@ export const ConditionSettingsTab = () => {
           <div className="flex-1">
             <FormField label="검색 디바운스 (ms)">
               <Controller name="searchDebounceMs" control={control} render={({ field }) => (
-                <Input heightType="h40" type="number" value={String(field.value ?? 300)} onChange={(e: any) => field.onChange(Number(e.target.value))} style={{ width: 120 }} />
+                <Input heightType="h40" type="number" value={String(field.value ?? 300)} onChange={(v: string) => field.onChange(Number(v))} style={{ width: 120 }} />
               )} />
             </FormField>
           </div>

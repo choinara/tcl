@@ -1,5 +1,7 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { X, Trash2 } from 'lucide-react';
+import { ToastContext } from './ToastContext';
+import type { ErrorHistoryItem } from './ToastContext';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -10,37 +12,10 @@ interface Toast {
   persistent?: boolean;
 }
 
-interface ErrorHistoryItem {
-  id: number;
-  timestamp: Date;
-  message: string;
-}
-
 interface ToastOptions {
   type?: ToastType;
-  /** true이면 사용자가 확인 클릭할 때까지 사라지지 않음 */
   persistent?: boolean;
 }
-
-interface ToastContextType {
-  notify: (message: string, options?: ToastOptions) => void;
-  errorHistory: ErrorHistoryItem[];
-  clearErrorHistory: () => void;
-  removeErrorHistory: (id: number) => void;
-  errorPanelOpen: boolean;
-  setErrorPanelOpen: (open: boolean) => void;
-}
-
-const ToastContext = createContext<ToastContextType>({
-  notify: () => {},
-  errorHistory: [],
-  clearErrorHistory: () => {},
-  removeErrorHistory: () => {},
-  errorPanelOpen: false,
-  setErrorPanelOpen: () => {},
-});
-
-export const useToast = () => useContext(ToastContext);
 
 let nextId = 0;
 let nextErrorId = 0;

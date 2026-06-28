@@ -6,7 +6,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakDataGrid } from '@/components/grid';
 import type { ColDef } from 'ag-grid-community';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Company {
@@ -83,45 +83,11 @@ export default function CompanyPage() {
         }
       } catch { notify('데이터 조회에 실패했습니다', { type: 'error' }); }
     })();
-  }, [refetchTrigger]);
+  }, [refetchTrigger, notify]);
 
   const getTypeLabel = useCallback((type: string) => {
     return typeCodes.find(c => c.code === type)?.codeName || type;
   }, [typeCodes]);
-
-  const columns = useMemo<ColDef<Company>[]>(() => [
-    { field: 'companyCode', headerName: '회사코드', width: 120 },
-    { field: 'companyName', headerName: '회사명', width: 180 },
-    {
-      field: 'companyType', headerName: '회사유형', width: 100,
-      valueFormatter: (params) => getTypeLabel(params.value),
-    },
-    { field: 'country', headerName: '국가', width: 100 },
-    { field: 'ceoName', headerName: '대표자', width: 100 },
-    { field: 'businessNumber', headerName: '사업자번호', width: 130 },
-    {
-      field: 'isActive', headerName: '활성', width: 70,
-      valueFormatter: (params) => params.value ? '활성' : '비활성',
-    },
-    {
-      headerName: '관리', width: 120, sortable: false,
-      cellRenderer: (params: { data: Company }) => {
-        if (!params.data) return null;
-        return (
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-            {perm.canUpdate && (
-              <button onClick={() => handleEdit(params.data)}
-                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
-            )}
-            {perm.canDelete && (
-              <button onClick={() => handleDelete(params.data)}
-                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
-            )}
-          </div>
-        );
-      },
-    },
-  ], [perm.canUpdate, perm.canDelete, getTypeLabel]);
 
   const validate = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
@@ -198,7 +164,7 @@ export default function CompanyPage() {
     } finally {
       setSaving(false);
     }
-  }, [form, selected, handleClose, validate]);
+  }, [form, selected, handleClose, validate, notify]);
 
   const handleDelete = useCallback(async (company: Company) => {
     if (!await confirmDialog('삭제하시겠습니까?')) return;
@@ -213,7 +179,41 @@ export default function CompanyPage() {
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [notify]);
+  }, [notify, confirmDialog]);
+
+  const columns = useMemo<ColDef<Company>[]>(() => [
+    { field: 'companyCode', headerName: '회사코드', width: 120 },
+    { field: 'companyName', headerName: '회사명', width: 180 },
+    {
+      field: 'companyType', headerName: '회사유형', width: 100,
+      valueFormatter: (params) => getTypeLabel(params.value),
+    },
+    { field: 'country', headerName: '국가', width: 100 },
+    { field: 'ceoName', headerName: '대표자', width: 100 },
+    { field: 'businessNumber', headerName: '사업자번호', width: 130 },
+    {
+      field: 'isActive', headerName: '활성', width: 70,
+      valueFormatter: (params) => params.value ? '활성' : '비활성',
+    },
+    {
+      headerName: '관리', width: 120, sortable: false,
+      cellRenderer: (params: { data: Company }) => {
+        if (!params.data) return null;
+        return (
+          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+            {perm.canUpdate && (
+              <button onClick={() => handleEdit(params.data)}
+                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
+            )}
+            {perm.canDelete && (
+              <button onClick={() => handleDelete(params.data)}
+                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
+            )}
+          </div>
+        );
+      },
+    },
+  ], [perm.canUpdate, perm.canDelete, getTypeLabel, handleEdit, handleDelete]);
 
   const f = (field: keyof CompanyForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }));

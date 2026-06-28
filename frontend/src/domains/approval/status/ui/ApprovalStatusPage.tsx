@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { authFetch } from '@/lib/api';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface DocItem {
   id: number;

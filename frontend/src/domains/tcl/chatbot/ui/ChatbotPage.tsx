@@ -9,7 +9,7 @@ export default function ChatbotPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="pgvector RAG로 과거 이메일·운임·스케줄 데이터를 검색하고 Claude API로 회신 초안을 생성하는 물류 업무 전용 AI 챗봇 인터페이스"
         features={[

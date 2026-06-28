@@ -32,7 +32,7 @@ const Checkbox = ({ checked, indeterminate, disabled, size = 'small', onChange, 
         onChange={onChange}
         disabled={disabled}
         name={name}
-        value={value as any}
+        value={value}
       />
       <span
         className={`inline-flex items-center justify-center rounded border transition-colors ${
@@ -80,7 +80,7 @@ interface BoxCheckBoxProps extends CustomCheckBoxProps {
 export const BoxCheckBox = ({ label, checked, onChange, disabled, ...rest }: BoxCheckBoxProps) => (
   <div
     className={`inline-flex items-center gap-3 px-4 py-3 border border-[var(--color-border)] rounded bg-white cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-    onClick={() => !disabled && onChange?.({ target: { checked: !checked } } as any)}
+    onClick={() => !disabled && onChange?.({ target: { checked: !checked } } as React.ChangeEvent<HTMLInputElement>)}
   >
     <Checkbox checked={checked} disabled={disabled} onChange={onChange} {...rest} />
     <span className={`text-sm font-medium select-none ${disabled ? 'text-[var(--color-text-disabled)]' : 'text-[var(--color-text-primary)]'}`}>{label}</span>
@@ -89,7 +89,7 @@ export const BoxCheckBox = ({ label, checked, onChange, disabled, ...rest }: Box
 
 interface ToggleCheckBoxProps {
   checked?: boolean;
-  onChange?: (e: any, checked?: boolean) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>, checked?: boolean) => void;
   label?: ReactNode;
   onLabel?: string;
   offLabel?: string;
@@ -137,7 +137,7 @@ export const ToggleCheckBox = ({
 
   const handleClick = () => {
     if (!disabled) {
-      onChange?.({ target: { checked: !checked } } as any, !checked);
+      onChange?.({ target: { checked: !checked } } as React.ChangeEvent<HTMLInputElement>, !checked);
     }
   };
 

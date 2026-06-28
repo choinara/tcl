@@ -9,7 +9,7 @@ export default function TrackingPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="컨테이너 번호 또는 B/L 번호로 선적 현황을 조회하고, ETA D-Day 카운트다운·통관 진행 상태·이벤트 타임라인을 실시간으로 모니터링하는 화면"
         features={[

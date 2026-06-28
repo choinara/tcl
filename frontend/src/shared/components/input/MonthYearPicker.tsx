@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import ReactDatePicker, { registerLocale } from 'react-datepicker';
 import { ko } from 'date-fns/locale';
 import { Calendar } from 'lucide-react';
@@ -14,7 +14,7 @@ export interface MonthYearPickerProps {
   width?: number | string;
 }
 
-const CustomInput = forwardRef<HTMLDivElement, any>(
+const CustomInput = forwardRef<HTMLDivElement, { value?: string; onClick?: () => void; placeholder?: string; disabled?: boolean; inputWidth?: number | string }>(
   ({ value, onClick, placeholder, disabled, inputWidth }, ref) => (
     <div
       ref={ref}

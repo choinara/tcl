@@ -9,7 +9,7 @@ export default function EmailDashboardPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="IMAP으로 수신된 이메일의 AI 분류 현황·자동응답 통계·미처리 건수를 실시간으로 모니터링하는 운영 대시보드"
         features={[

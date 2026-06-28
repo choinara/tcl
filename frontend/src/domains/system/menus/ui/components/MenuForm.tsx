@@ -99,7 +99,7 @@ export const MenuForm = ({ menu, onSave, onDelete, isLoading }: MenuFormProps) =
 
           <FormField label="정렬순서">
             <Controller name="sortOrder" control={control} render={({ field }) => (
-              <Input heightType="h40" type="number" value={String(field.value)} onChange={(e: any) => field.onChange(Number(e.target.value))} style={{ width: 120 }} />
+              <Input heightType="h40" type="number" value={String(field.value)} onChange={(value: string) => field.onChange(Number(value))} style={{ width: 120 }} />
             )} />
           </FormField>
 

@@ -7,7 +7,7 @@ import { CreateCardWrapper } from '@/shared/components/card/CreateCardWrapper';
 import { PageHeader } from '@/shared/components/header';
 import Input from '@/shared/components/input/Input';
 import { CustomRadio } from '@/shared/components/radio/radio';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { AdminUserFormData } from '../types/adminUser';
 
@@ -21,12 +21,12 @@ export const UserMemberCreate = () => {
   const { notify } = useToast();
 
   const { mutate: createUser, isPending: isLoading } = useMutation({
-    mutationFn: (data: any) => api.post('/admin/users', data),
+    mutationFn: (data: Omit<AdminUserFormData, 'passwordConfirm'>) => api.post('/admin/users', data),
     onSuccess: () => {
       notify('사용자가 등록되었습니다', { type: 'success' });
       navigate('/system/users');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       notify(`등록 실패: ${error.message}`, { type: 'error' });
     },
   });
@@ -51,7 +51,8 @@ export const UserMemberCreate = () => {
       notify('비밀번호가 일치하지 않습니다', { type: 'error' });
       return;
     }
-    const { passwordConfirm, ...apiData } = data;
+    const { passwordConfirm: _, ...apiData } = data;
+    void _;
     createUser(apiData);
   };
 

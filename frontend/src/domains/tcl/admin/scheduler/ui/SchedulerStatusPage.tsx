@@ -9,7 +9,7 @@ export default function SchedulerStatusPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="Python APScheduler(스크래핑·임베딩 배치)와 Spring TaskScheduler(IMAP·알림·Teams)의 실행 이력·성공/실패·다음 실행 예정을 통합 모니터링하는 운영 대시보드"
         features={[

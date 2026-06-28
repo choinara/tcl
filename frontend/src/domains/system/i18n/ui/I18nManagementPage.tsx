@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 
 interface I18nRow {
   id?: number;

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, type ChangeEvent, type InputHTML
 import { X } from 'lucide-react';
 
 type InputHeightType = 'h40' | 'h32';
-type InputType = 'short' | 'long';
+type InputLayout = 'short' | 'long';
 
 const heightClasses: Record<InputHeightType, string> = {
   h40: 'h-10 text-sm',
@@ -11,7 +11,7 @@ const heightClasses: Record<InputHeightType, string> = {
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'onChange' | 'size'> {
   heightType?: InputHeightType;
-  type?: InputType;
+  layout?: InputLayout;
   btnWidth?: number | string;
   btnHeight?: number | string;
   width?: number | string;
@@ -25,13 +25,13 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement | 
   rows?: number;
   error?: string;
   sx?: React.CSSProperties;
-  inputProps?: Record<string, any>;
+  inputProps?: Record<string, unknown>;
 }
 
 const InputComponent = (props: InputProps) => {
   const {
     heightType = 'h40',
-    type = 'short',
+    layout = 'short',
     btnWidth,
     btnHeight,
     width,
@@ -53,8 +53,8 @@ const InputComponent = (props: InputProps) => {
     ...rest
   } = props;
 
-  const isMultiline = multiline !== undefined ? multiline : type === 'long';
-  const showResizeGrip = showResizeGripProp !== undefined ? showResizeGripProp : type === 'long';
+  const isMultiline = multiline !== undefined ? multiline : layout === 'long';
+  const showResizeGrip = showResizeGripProp !== undefined ? showResizeGripProp : layout === 'long';
 
   const [internalValue, setInternalValue] = useState('');
   const isControlled = controlledValue !== undefined;
@@ -72,7 +72,7 @@ const InputComponent = (props: InputProps) => {
   const handleClear = useCallback(() => {
     if (controlledValue === undefined) setInternalValue('');
     onChange?.('');
-    if (props.onBlur) (props.onBlur as any)();
+    if (props.onBlur) (props.onBlur as unknown as () => void)();
     onClear?.();
   }, [onChange, onClear, controlledValue, props]);
 
@@ -111,8 +111,8 @@ const InputComponent = (props: InputProps) => {
             rows={rows}
             className={`${inputCls} h-auto py-2 ${showResizeGrip ? 'resize' : 'resize-none'}`}
             style={height ? { height: typeof height === 'number' ? `${height}px` : height } : undefined}
-            {...(customInputProps as any)}
-            {...(rest as any)}
+            {...(customInputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+            {...(rest as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         </div>
         {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
@@ -132,7 +132,7 @@ const InputComponent = (props: InputProps) => {
           className={`${inputCls} ${showClear ? 'pr-8' : ''}`}
           style={wrapperStyle.height ? { height: wrapperStyle.height } : undefined}
           {...customInputProps}
-          {...(rest as any)}
+          {...(rest as React.InputHTMLAttributes<HTMLInputElement>)}
         />
         {showClear && (
           <button

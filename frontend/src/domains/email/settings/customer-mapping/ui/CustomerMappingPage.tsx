@@ -12,7 +12,7 @@ export default function CustomerMappingPage() {
 
   return (
     <div>
-      <PageTitle title={t('menu.EM0030', '고객사이메일매핑')} menuCode="EM0030" />
+      <PageTitle />
       <div style={{ padding: 20, color: '#94a3b8' }}>
         {t('common.preparing', '준비 중입니다.')}
       </div>

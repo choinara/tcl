@@ -4,7 +4,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageHeader } from '@/shared/components/header';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import { DropDown } from '@/components/ui/DropDown';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { RoleSummary } from '../types/menuAuth';
 
@@ -26,12 +26,12 @@ export const SystemMenuAuthPage = () => {
 
   const { data: roles = [] } = useQuery({
     queryKey: ['menu-auth-roles'],
-    queryFn: async () => { const res = await api.get<any>('/admin/roles'); return (res.data?.content ?? res.data ?? []) as RoleSummary[]; },
+    queryFn: async () => { const res = await api.get<RoleSummary[]>('/admin/roles'); return (res.data ?? []) as RoleSummary[]; },
   });
 
   const { data: permissions = [] } = useQuery({
     queryKey: ['menu-auth-permissions', selectedRoleId],
-    queryFn: async () => { const res = await api.get<any>(`/system/menu-auth/${selectedRoleId}`); return (res.data ?? []) as PermissionRow[]; },
+    queryFn: async () => { const res = await api.get<PermissionRow[]>(`/system/menu-auth/${selectedRoleId}`); return (res.data ?? []) as PermissionRow[]; },
     enabled: !!selectedRoleId,
   });
 
@@ -45,7 +45,7 @@ export const SystemMenuAuthPage = () => {
       notify('메뉴 권한이 저장되었습니다', { type: 'success' });
       qc.invalidateQueries({ queryKey: ['menu-auth-permissions'] });
     },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const handleToggle = (idx: number, field: 'read' | 'write' | 'delete' | 'approve') => {
@@ -75,7 +75,7 @@ export const SystemMenuAuthPage = () => {
       <div className="px-3 py-2.5 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium">역할 선택</span>
-          <DropDown options={roleOptions} value={selectedRoleId} onChange={(v) => { setSelectedRoleId(v); setLocalPerms([]); }} heightType="h32" placeholder="역할을 선택하세요" />
+          <DropDown options={roleOptions} value={selectedRoleId} onChange={(e) => { setSelectedRoleId(String(e.target.value)); setLocalPerms([]); }} heightType="h32" placeholder="역할을 선택하세요" />
         </div>
       </div>
 

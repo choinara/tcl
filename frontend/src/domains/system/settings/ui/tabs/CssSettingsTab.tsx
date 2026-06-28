@@ -5,7 +5,7 @@ import { FormField } from '@/shared/components/form';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import Input from '@/shared/components/input/Input';
 import { CreateCardWrapper } from '@/shared/components/card/CreateCardWrapper';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { CssSettingsData } from '../../types/systemSettings';
 
@@ -15,13 +15,13 @@ export const CssSettingsTab = () => {
 
   const { data: settings } = useQuery({
     queryKey: ['system-settings-css'],
-    queryFn: async () => { const res = await api.get<any>('/system/settings/css'); return (res.data ?? {}) as CssSettingsData; },
+    queryFn: async () => { const res = await api.get<CssSettingsData>('/system/settings/css'); return (res.data ?? {}) as CssSettingsData; },
   });
 
   const { mutate: save, isPending } = useMutation({
     mutationFn: (data: CssSettingsData) => api.put('/system/settings/css', data),
     onSuccess: () => { notify('CSS 설정이 저장되었습니다', { type: 'success' }); qc.invalidateQueries({ queryKey: ['system-settings-css'] }); },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const { control, handleSubmit, reset } = useForm<CssSettingsData>({
@@ -67,7 +67,7 @@ export const CssSettingsTab = () => {
         </div>
         <FormField label="커스텀 CSS">
           <Controller name="customCss" control={control} render={({ field }) => (
-            <Input heightType="h40" value={field.value || ''} onChange={field.onChange} placeholder="커스텀 CSS 입력" type="long" rows={6} style={{ flex: 1 }} />
+            <Input heightType="h40" value={field.value || ''} onChange={field.onChange} placeholder="커스텀 CSS 입력" layout="long" rows={6} style={{ flex: 1 }} />
           )} />
         </FormField>
       </div>

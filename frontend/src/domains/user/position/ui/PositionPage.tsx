@@ -7,7 +7,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { PeakDataGrid } from '@/components/grid';
 import type { ColDef } from 'ag-grid-community';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { useConfirm } from '@/components/ui/ConfirmDialog';
 
 interface Position {
@@ -47,38 +47,6 @@ export default function PositionPage() {
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   const codes = useCommonCodes('POS_LEVEL', 'USER_ROLE');
-
-  const columns = useMemo<ColDef<Position>[]>(() => [
-    { field: 'positionCode', headerName: '직급코드', width: 120 },
-    { field: 'positionName', headerName: '직급명', width: 140 },
-    {
-      field: 'positionLevel', headerName: '레벨', width: 100,
-      valueFormatter: (params) => getCodeName(codes['POS_LEVEL'], String(params.value)),
-    },
-    { field: 'sortOrder', headerName: '정렬', width: 80 },
-    {
-      field: 'isActive', headerName: '활성', width: 80,
-      valueFormatter: (params) => params.value ? '활성' : '비활성',
-    },
-    {
-      headerName: '관리', width: 120, sortable: false,
-      cellRenderer: (params: { data: Position }) => {
-        if (!params.data) return null;
-        return (
-          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
-            {perm.canUpdate && (
-              <button onClick={() => handleEdit(params.data)}
-                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
-            )}
-            {perm.canDelete && (
-              <button onClick={() => handleDelete(params.data)}
-                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
-            )}
-          </div>
-        );
-      },
-    },
-  ], [perm.canUpdate, perm.canDelete, codes]);
 
   const validate = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
@@ -137,7 +105,7 @@ export default function PositionPage() {
     } finally {
       setSaving(false);
     }
-  }, [form, selected, handleClose, validate]);
+  }, [form, selected, handleClose, validate, notify]);
 
   const handleDelete = useCallback(async (pos: Position) => {
     if (!await confirmDialog('삭제하시겠습니까?')) return;
@@ -149,7 +117,39 @@ export default function PositionPage() {
     } catch (err) {
       notify('삭제에 실패했습니다: ' + (err instanceof Error ? err.message : String(err)), { type: 'error' });
     }
-  }, [notify]);
+  }, [notify, confirmDialog]);
+
+  const columns = useMemo<ColDef<Position>[]>(() => [
+    { field: 'positionCode', headerName: '직급코드', width: 120 },
+    { field: 'positionName', headerName: '직급명', width: 140 },
+    {
+      field: 'positionLevel', headerName: '레벨', width: 100,
+      valueFormatter: (params) => getCodeName(codes['POS_LEVEL'], String(params.value)),
+    },
+    { field: 'sortOrder', headerName: '정렬', width: 80 },
+    {
+      field: 'isActive', headerName: '활성', width: 80,
+      valueFormatter: (params) => params.value ? '활성' : '비활성',
+    },
+    {
+      headerName: '관리', width: 120, sortable: false,
+      cellRenderer: (params: { data: Position }) => {
+        if (!params.data) return null;
+        return (
+          <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
+            {perm.canUpdate && (
+              <button onClick={() => handleEdit(params.data)}
+                className="mes-btn mes-btn-edit" style={{ padding: '2px 8px', fontSize: 12 }}>수정</button>
+            )}
+            {perm.canDelete && (
+              <button onClick={() => handleDelete(params.data)}
+                className="mes-btn mes-btn-delete" style={{ padding: '2px 8px', fontSize: 12 }}>삭제</button>
+            )}
+          </div>
+        );
+      },
+    },
+  ], [perm.canUpdate, perm.canDelete, codes, handleEdit, handleDelete]);
 
   const f = (field: keyof PositionForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [field]: e.target.value }));

@@ -9,7 +9,7 @@ export default function TaskManagementPage() {
 
   return (
     <div className="page-container">
-      <PageTitle menuCode={MENU_CODE} />
+      <PageTitle />
       <PlaceholderInfo
         purpose="TCL 51개 AI 개발 과제의 진행 상태·담당자·마일스톤을 추적하고, 그룹(A/B/C/D)별 완료율과 의존 관계를 시각화하는 프로젝트 관리 화면"
         features={[

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ColDef } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
@@ -7,15 +7,18 @@ import { PageHeader } from '@/shared/components/header';
 import { PrimaryButton } from '@/shared/components/button/CustomButton';
 import Input from '@/shared/components/input/Input';
 import { FilterSearchButton } from '@/shared/components/button/CustomButton';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import type { MenuException } from '../types/userAuth';
 
-interface SelectedUser {
+interface UserRow {
   userId: number;
   loginId: string;
   userName: string;
+  deptName?: string;
 }
+
+type SelectedUser = Pick<UserRow, 'userId' | 'loginId' | 'userName'>;
 
 export const SystemUserAuthPage = () => {
   const perm = usePermission('SM0050');
@@ -26,7 +29,7 @@ export const SystemUserAuthPage = () => {
 
   const { data: exceptions = [] } = useQuery({
     queryKey: ['user-auth-exceptions', selectedUser?.userId],
-    queryFn: async () => { const res = await api.get<any>(`/system/user-auth/${selectedUser!.userId}`); return (res.data ?? []) as MenuException[]; },
+    queryFn: async () => { const res = await api.get<MenuException[]>(`/system/user-auth/${selectedUser!.userId}`); return (res.data ?? []) as MenuException[]; },
     enabled: !!selectedUser,
   });
 
@@ -40,7 +43,7 @@ export const SystemUserAuthPage = () => {
       notify('예외권한이 저장되었습니다', { type: 'success' });
       qc.invalidateQueries({ queryKey: ['user-auth-exceptions'] });
     },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const handleToggle = (idx: number, field: 'read' | 'write' | 'delete') => {
@@ -78,15 +81,15 @@ export const SystemUserAuthPage = () => {
         <div className="w-[350px] border border-[var(--color-border)] rounded-[10px] overflow-hidden flex flex-col">
           <div className="px-4 py-3 border-b border-[var(--color-border)] bg-[var(--color-bg-secondary)]">
             <div className="flex gap-1">
-              <Input value={keyword} onChange={(e: any) => setKeyword(e.target.value)} placeholder="사용자 검색" heightType="h32" style={{ flex: 1 }}
-                onKeyDown={(e: any) => e.key === 'Enter' && setKeyword(keyword)} />
+              <Input value={keyword} onChange={(v: string) => setKeyword(v)} placeholder="사용자 검색" heightType="h32" style={{ flex: 1 }}
+                onKeyDown={(e: KeyboardEvent) => e.key === 'Enter' && setKeyword(keyword)} />
               <FilterSearchButton onClick={() => setKeyword(keyword)} />
             </div>
           </div>
           <div className="flex-1 min-h-0">
             <PeakDataGrid columns={userColumns} queryKey={['user-auth-users', keyword]} queryUrl="/admin/users" extraParams={{ keyword }}
               permission={{ canExport: perm.canExport }}
-              onRowClick={(row: any) => { setSelectedUser({ userId: row.userId, loginId: row.loginId, userName: row.userName }); setLocalExceptions([]); }} />
+              onRowClick={(row: UserRow) => { setSelectedUser({ userId: row.userId, loginId: row.loginId, userName: row.userName }); setLocalExceptions([]); }} />
           </div>
         </div>
 

@@ -3,7 +3,7 @@ import { usePermission } from '@/hooks/usePermission';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { usePreferenceStore } from '@/stores/usePreferenceStore';
 import type { GlassConfig } from '@/stores/usePreferenceStore';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { hexToGlassGradient } from '@/lib/glassUtils';
 
 // CSS customizable variable definitions

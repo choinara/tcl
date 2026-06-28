@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { ColDef } from 'ag-grid-community';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import type { ColDef, ValueFormatterParams } from 'ag-grid-community';
 import { PeakDataGrid } from '@/components/grid/PeakDataGrid';
 import { PageHeader } from '@/shared/components/header';
-import { PrimaryButton, GhostButton } from '@/shared/components/button/CustomButton';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { PrimaryButton } from '@/shared/components/button/CustomButton';
+import { useToast } from '@/shared/components/toast/useToast';
 import { api } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import type { RoleInfo } from '../types/userRole';
@@ -12,13 +12,15 @@ import type { RoleInfo } from '../types/userRole';
 export const UserRolePage = () => {
   const perm = usePermission('SM0030');
   const { notify } = useToast();
-  const qc = useQueryClient();
   const [selectedRole, setSelectedRole] = useState<RoleInfo | null>(null);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   const { data: roles = [] } = useQuery({
     queryKey: ['user-roles'],
-    queryFn: async () => { const res = await api.get<any>('/admin/roles'); return (res.data?.content ?? res.data ?? []) as RoleInfo[]; },
+    queryFn: async () => {
+      const res = await api.get<RoleInfo[] & { content?: RoleInfo[] }>('/admin/roles');
+      return (res.data?.content ?? res.data ?? []) as RoleInfo[];
+    },
   });
 
   const { mutate: assignUsers, isPending } = useMutation({
@@ -28,7 +30,7 @@ export const UserRolePage = () => {
       notify('권한이 저장되었습니다', { type: 'success' });
       setRefetchTrigger(prev => prev + 1);
     },
-    onError: (err: any) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
+    onError: (err: Error) => { notify(`저장 실패: ${err.message}`, { type: 'error' }); },
   });
 
   const userColumns: ColDef[] = [
@@ -37,7 +39,7 @@ export const UserRolePage = () => {
     { field: 'userName', headerName: '이름', flex: 1, minWidth: 150 },
     { field: 'deptName', headerName: '부서', width: 120, cellStyle: { textAlign: 'center' } },
     { field: 'assigned', headerName: '할당', width: 80, cellStyle: { textAlign: 'center' },
-      valueFormatter: (p: any) => p.value ? 'Y' : 'N' },
+      valueFormatter: (p: ValueFormatterParams) => p.value ? 'Y' : 'N' },
   ];
 
   return (

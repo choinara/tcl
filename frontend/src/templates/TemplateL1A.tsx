@@ -12,13 +12,13 @@
  */
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, CellStyle } from 'ag-grid-community';
 import { useTranslation } from 'react-i18next';
 import { authFetch } from '@/lib/api';
 import { usePermission } from '@/hooks/usePermission';
 import { useDateRange } from '@/hooks/useDateRange';
 import { useCommonCodes } from '@/hooks/useCommonCodes';
-import { useToast } from '@/shared/components/toast/ToastProvider';
+import { useToast } from '@/shared/components/toast/useToast';
 import { PageFilterShell } from '@/components/layout/PageFilterShell';
 import { PeakEditGrid } from '@/components/grid';
 import type { PeakEditGridRef } from '@/components/grid';
@@ -87,7 +87,7 @@ export default function TemplateL1APage() {
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: ['Y', 'N'] },
       valueFormatter: (p) => p.value === 'Y' ? '사용' : '미사용',
-      cellStyle: (p) => p.value === 'N' ? { color: '#94a3b8' } : {},
+      cellStyle: (p): CellStyle | null => p.value === 'N' ? { color: '#94a3b8' } : null,
     },
   ], []);
 
