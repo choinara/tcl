@@ -2510,6 +2510,28 @@
         "tabPlc": "PLC",
         "tabVision": "Vision"
       }
+    },
+    "devtask": {
+      "taskCode": "Task Code",
+      "taskName": "Task Name",
+      "taskGroup": "Task Group",
+      "devType": "Dev Type",
+      "priority": "Priority",
+      "status": "Status",
+      "phase": "Phase",
+      "proposer": "Proposer",
+      "assignee": "Assignee",
+      "relatedMenuCode": "Related Menu",
+      "description": "Description",
+      "completionCriteria": "Completion Criteria",
+      "plannedStart": "Planned Start",
+      "plannedEnd": "Planned End",
+      "actualStartDate": "Actual Start",
+      "actualEndDate": "Actual End",
+      "progress": "Progress",
+      "remarks": "Remarks",
+      "stats": "Group Statistics",
+      "detail": "Task Detail"
     }
   }
 }
