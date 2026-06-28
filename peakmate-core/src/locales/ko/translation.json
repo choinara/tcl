@@ -2553,6 +2553,28 @@
         "tabPlc": "PLC",
         "tabVision": "Vision"
       }
+    },
+    "devtask": {
+      "taskCode": "과제코드",
+      "taskName": "과제명",
+      "taskGroup": "기능그룹",
+      "devType": "개발유형",
+      "priority": "우선순위",
+      "status": "상태",
+      "phase": "Phase",
+      "proposer": "제안자",
+      "assignee": "담당자",
+      "relatedMenuCode": "관련메뉴",
+      "description": "설명",
+      "completionCriteria": "완료기준",
+      "plannedStart": "예정시작",
+      "plannedEnd": "예정종료",
+      "actualStartDate": "실제시작",
+      "actualEndDate": "실제완료",
+      "progress": "진행률",
+      "remarks": "비고",
+      "stats": "그룹별 현황",
+      "detail": "과제 상세"
     }
   }
 }
