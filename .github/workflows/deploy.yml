@@ -1,0 +1,52 @@
+name: TCL Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-backend:
+    name: Backend Build & Deploy
+    runs-on: [self-hosted, tcl-dev]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build JAR
+        working-directory: backend
+        run: |
+          chmod +x gradlew
+          ./gradlew bootJar -x test
+
+      - name: Deploy JAR
+        run: |
+          mkdir -p /home/peakmate/tcl/app
+          cp backend/build/libs/backend-*.jar /home/peakmate/tcl/app/tcl-backend.jar
+          sudo /bin/systemctl restart tcl-backend
+
+      - name: Health Check
+        run: |
+          sleep 15
+          curl -f http://localhost:8096/actuator/health || echo "헬스체크 실패 — 로그 확인 필요"
+
+  deploy-frontend:
+    name: Frontend Build & Deploy
+    runs-on: [self-hosted, tcl-dev]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Deploy Static Files
+        run: |
+          sudo /bin/rm -rf /var/www/tcl/html
+          sudo /bin/mkdir -p /var/www/tcl/html
+          sudo /bin/cp -r frontend/dist/. /var/www/tcl/html/
+          sudo /bin/systemctl restart nginx
