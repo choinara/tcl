@@ -55,7 +55,7 @@ export function useSettingsTab<T extends Record<string, unknown>>({
     },
   });
 
-  const formMethods = useForm<T>({ defaultValues: defaultValues as Parameters<typeof useForm<T>>[0]['defaultValues'] });
+  const formMethods = useForm<T>({ defaultValues: defaultValues as Parameters<typeof useForm<T>>[0] extends infer O ? O extends { defaultValues?: infer D } ? D : never : never });
   const { reset } = formMethods;
 
   useEffect(() => {

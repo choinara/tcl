@@ -81,7 +81,7 @@ export const UserRolePage = () => {
           </div>
           {selectedRole ? (
             <div className="flex-1 flex flex-col min-h-0 p-2.5">
-              <PeakDataGrid columns={userColumns} queryKey={['role-users', selectedRole.roleId]} queryUrl={`/admin/roles/${selectedRole.roleId}/users`} refetchTrigger={refetchTrigger} permission={{ canExport: perm.canExport }} />
+              <PeakDataGrid columns={userColumns} queryKey={['role-users', selectedRole.roleId.toString()]} queryUrl={`/admin/roles/${selectedRole.roleId}/users`} refetchTrigger={refetchTrigger} permission={{ canExport: perm.canExport }} />
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center text-sm text-[var(--color-text-secondary)]">

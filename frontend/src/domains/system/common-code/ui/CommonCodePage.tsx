@@ -214,7 +214,7 @@ export default function CommonCodePage() {
   }, [selectedGroup, fetchCodes, notify]);
 
   // ── EditGrid columns (동적 Extra 라벨) ──
-  const codeColumns = useMemo<ColDef[]>(() => {
+  const codeColumns = useMemo(() => {
     const extra1Header = selectedGroup?.extra1Label || 'Extra1';
     const extra2Header = selectedGroup?.extra2Label || 'Extra2';
 
@@ -232,7 +232,7 @@ export default function CommonCodePage() {
         valueFormatter: (params) => params.value === 'Y' ? '사용' : '미사용',
         cellStyle: (params) => params.value === 'N' ? { textAlign: 'center', color: '#94a3b8' } : { textAlign: 'center' },
       },
-    ];
+    ] as ColDef<any>[];
   }, [selectedGroup?.extra1Label, selectedGroup?.extra2Label]);
 
   // ── EditGrid data (Code[] → Record[]) ──

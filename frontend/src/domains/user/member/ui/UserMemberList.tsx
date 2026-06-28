@@ -57,7 +57,7 @@ export const UserMemberList = () => {
     <div className="flex-1 flex flex-col bg-white">
       <PageHeader title="사용자 관리" subtitle="시스템 사용자를 등록하고 관리합니다"
         rightContent={<PrimaryButton heightType="h40" onClick={() => navigate('/system/users/create')}>사용자 등록</PrimaryButton>} />
-      <UserMemberFilterForm onSearch={setFilters} />
+      <UserMemberFilterForm onSearch={setFilters as (filters: { keyword: string; status: string }) => void} />
       <div className="flex-1 flex flex-col min-h-0 mt-1">
         <PeakDataGrid columns={columns} queryKey={['admin-users']} queryUrl="/admin/users" extraParams={{ ...filters, ...dateParams }}
           onRowClick={(row: AdminUser) => navigate(`/system/users/${row.userId}/show`)}

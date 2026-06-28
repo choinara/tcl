@@ -37,7 +37,7 @@ export const UploadCard: React.FC<UploadCardProps> = ({
       {/* 상단: 아이콘 + 파일 정보 */}
       <div className="flex items-center gap-3.5 mx-4 py-3.5 border-b border-[var(--color-border)]">
         <div className="shrink-0 flex items-center justify-center">
-          <IconComponent size={FILE_ICON_SIZE} style={{ color: iconColor }} />
+          <IconComponent size={FILE_ICON_SIZE} {...{ style: { color: iconColor } } as Record<string, unknown>} />
         </div>
         <div className="flex-1 flex flex-col justify-center min-w-0">
           <span className="text-sm font-semibold text-[var(--color-text-primary)] truncate">

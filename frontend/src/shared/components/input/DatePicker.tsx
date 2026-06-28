@@ -148,7 +148,7 @@ export const DateRangePicker = ({
   return (
     <div className="[&_.react-datepicker-wrapper]:w-full">
       <ReactDatePicker
-        ref={datePickerRef}
+        ref={datePickerRef as React.Ref<ReactDatePicker>}
         selected={tempStartDate}
         onChange={handleDateChange}
         startDate={tempStartDate}

@@ -6,7 +6,7 @@ import { TabBar } from './TabBar';
 import { Modal } from '@/components/ui/Modal';
 import { FormField } from '@/components/ui/FormField';
 import { useTabStore } from '@/stores/useTabStore';
-import { useAuthStore, type MenuTreeNode } from '@/stores/useAuthStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { usePreferenceStore, type GlassConfig, DEFAULT_GLASS } from '@/stores/usePreferenceStore';
 import type { MenuConfig } from './types';
 import { buildPathToI18nKey, getPageTitleFromStatic, getPageTitleFromDynamic, getMenuCodeFromDynamic, findFirstAccessibleMenu } from './menuUtils';

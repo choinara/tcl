@@ -236,7 +236,7 @@ export default function TemplateL1BDemoPage() {
         <PeakEditGrid
           gridId={`${MENU_CODE}-grid`}
           columns={columns}
-          data={displayData}
+          data={displayData as unknown as Record<string, unknown>[]}
           onBatchSave={async () => {}}
           permission={{ canCreate: false, canUpdate: false, canDelete: false, canExport: perm.canExport }}
           onRowClick={(row) => setSelectedCustomer(row as unknown as CustomerRow)}

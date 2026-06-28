@@ -123,7 +123,7 @@ export function PeakDataGrid<T>({
   });
 
   // ── 검색 state ──
-  const [keyword, setKeyword] = useState('');
+  const [keyword, _setKeyword] = useState('');
   const [allKeyword, setAllKeyword] = useState('');
   const [quickFilterText, setQuickFilterText] = useState('');
   const [debouncedQuickFilter, setDebouncedQuickFilter] = useState('');
@@ -174,11 +174,6 @@ export function PeakDataGrid<T>({
     if (fromServer) setColumnOrder(fromServer);
   }, [prefStore.loaded, gridId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isColumnOrderCustomized = useMemo(() => {
-    if (defaultOrder.length !== columnOrder.length) return true;
-    return defaultOrder.some((name, i) => name !== columnOrder[i]);
-  }, [defaultOrder, columnOrder]);
-
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const executeResetColumnOrder = useCallback(() => {
@@ -199,7 +194,7 @@ export function PeakDataGrid<T>({
       if (!hideRowNumber && features.rowNumber) prefix.push({ colId: '__rowNum', pinned: null });
       const defaultState = [
         ...prefix,
-        ...defaultOrder.filter(Boolean).map((colId) => ({ colId, pinned: null as string | null })),
+        ...defaultOrder.filter(Boolean).map((colId) => ({ colId, pinned: null as 'left' | 'right' | null })),
       ];
       api.applyColumnState({ state: defaultState, applyOrder: true });
       setTimeout(() => {
@@ -228,7 +223,7 @@ export function PeakDataGrid<T>({
       const widths: Record<string, number> = {};
       api.getColumnState().forEach((cs) => {
         if (cs.colId !== '__drag' && cs.colId !== '__rowNum') {
-          widths[cs.colId] = cs.width;
+          widths[cs.colId] = cs.width ?? 0;
         }
       });
       hasCustomWidthsRef.current = true;
@@ -333,12 +328,12 @@ export function PeakDataGrid<T>({
     for (const id of columnOrder) {
       const col = colMap.get(id);
       if (col) {
-        result.push(col);
+        result.push(col as ColDef<T>);
         colMap.delete(id);
       }
     }
     for (const col of colMap.values()) {
-      result.push(col);
+      result.push(col as ColDef<T>);
     }
     return result;
   }, [columns, columnOrder, savedWidths, hiddenColumns, features]);
@@ -487,7 +482,7 @@ export function PeakDataGrid<T>({
 
   const handlePageSizeChange = useCallback((size: number) => {
     setEffectivePageSize(size);
-    gridRef.current?.api?.paginationSetPageSize(size);
+    gridRef.current?.api?.setGridOption('paginationPageSize', size);
     gridRef.current?.api?.paginationGoToPage(0);
     usePreferenceStore.getState().setGridPageSize(size);
   }, []);
@@ -513,7 +508,7 @@ export function PeakDataGrid<T>({
     const widths: Record<string, number> = {};
     colState.forEach((cs) => {
       if (cs.colId !== '__drag' && cs.colId !== '__rowNum') {
-        widths[cs.colId] = cs.width;
+        widths[cs.colId] = cs.width ?? 0;
       }
     });
     setSavedWidths(widths);
@@ -528,7 +523,7 @@ export function PeakDataGrid<T>({
     const widths: Record<string, number> = {};
     api.getColumnState().forEach((cs) => {
       if (cs.colId !== '__drag' && cs.colId !== '__rowNum') {
-        widths[cs.colId] = cs.width;
+        widths[cs.colId] = cs.width ?? 0;
       }
     });
     hasCustomWidthsRef.current = true;
@@ -673,7 +668,7 @@ export function PeakDataGrid<T>({
     // 숫자 컬럼 필드 목록
     const numFields = columns
       .filter((c) => c.type === 'numericColumn' && c.field)
-      .map((c) => c.field!);
+      .map((c) => c.field as string);
 
     const focusedField = focusedCell.column.getColId();
     const startIdx = Math.max(0, numFields.indexOf(focusedField));
@@ -921,8 +916,6 @@ export function PeakDataGrid<T>({
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const isCustomized = isColumnOrderCustomized || widthsCustomized;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>

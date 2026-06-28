@@ -8,7 +8,7 @@ export type { ApiResponse, PagedResponse, GridFeatureToggles } from './component
 
 // Components - UI
 export { useConfirm } from './components/ui/ConfirmDialog';
-export { default as CheckboxMatrix } from './components/ui/CheckboxMatrix';
+export { CheckboxMatrix } from './components/ui/CheckboxMatrix';
 export { FormField } from './components/ui/FormField';
 export { ImageUpload } from './components/ui/ImageUpload';
 export { LanguageSwitcher } from './components/ui/LanguageSwitcher';
@@ -19,8 +19,8 @@ export { PremiumCard } from './components/ui/PremiumCard';
 export { PremiumChart } from './components/ui/PremiumChart';
 export { SplitPanel } from './components/ui/SplitPanel';
 export { TabPanel } from './components/ui/TabPanel';
-export { default as TreeCheckboxMatrix } from './components/ui/TreeCheckboxMatrix';
-export { default as TreeView } from './components/ui/TreeView';
+export { TreeCheckboxMatrix } from './components/ui/TreeCheckboxMatrix';
+export { TreeView } from './components/ui/TreeView';
 export { DateInput } from './components/ui/DateInput';
 export { DateRangeInput } from './components/ui/DateRangeInput';
 export type { DateRangeInputProps } from './components/ui/DateRangeInput';

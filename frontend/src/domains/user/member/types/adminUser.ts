@@ -7,6 +7,7 @@ export interface AdminUser {
   email?: string;
   employeeNumber?: string;
   status?: string;
+  roleId?: string;
   roleName?: string;
   createId?: string;
   createDt?: string;

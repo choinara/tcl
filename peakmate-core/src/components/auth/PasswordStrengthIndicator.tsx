@@ -51,8 +51,6 @@ export function PasswordStrengthIndicator({ password }: Props) {
   );
 
   const passedCount = results.filter((r) => r.passed).length;
-  const total = results.length;
-
   const strength = useMemo(() => {
     if (!password) return { label: '', color: '#e2e8f0', width: 0 };
     if (passedCount <= 2) return { label: '약함', color: '#ef4444', width: 25 };

@@ -163,7 +163,7 @@ export default function TaskManagementPage() {
   }, []);
 
   // Column definitions
-  const columns = useMemo<ColDef[]>(() => {
+  const columns = useMemo(() => {
     const stageValues = stageCodes.map(c => c.code);
     const groupValues = groupCodes.map(c => c.code);
     const devTypeValues = devTypeCodes.map(c => c.code);
@@ -305,7 +305,7 @@ export default function TaskManagementPage() {
         valueFormatter: (params) => params.value === 'Y' ? t('common.yes', '사용') : t('common.no', '미사용'),
         cellStyle: (params) => params.value === 'N' ? { textAlign: 'center', color: '#94a3b8' } : { textAlign: 'center' },
       },
-    ];
+    ] as ColDef<any>[];
   }, [stageCodes, groupCodes, devTypeCodes, priorityCodes, t, handleOpenDetail, schedules]);
 
   // Filter select style
@@ -390,7 +390,7 @@ export default function TaskManagementPage() {
         }
         toolbarTitle={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <PageTitle menuCode={MENU_CODE} />
+            <PageTitle i18nKey={`menu.${MENU_CODE}`} />
             <select value={stageFilter} onChange={e => setStageFilter(e.target.value)} style={filterStyle}>
               <option value="">{t('page.devtask.stage', '단계')} ({t('common.all', '전체')})</option>
               {stageCodes.map(c => (

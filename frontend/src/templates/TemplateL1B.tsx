@@ -197,12 +197,12 @@ export default function TemplateL1BPage() {
             <DateRangeFilter
               label="기간"
               dateFrom={dateFrom} dateTo={dateTo}
-              onChangeDateFrom={setDateFrom} onChangeDateTo={setDateTo}
+              onDateFromChange={setDateFrom} onDateToChange={setDateTo}
             />
             <FilterField label="필터링:">
               <div style={{ display: 'flex', gap: 2 }}>
                 <DropdownFilter
-                  options={typeOptions} value={typeFilter} onChange={setTypeFilter}
+                  options={typeOptions.map(c => ({ value: c.code, label: c.codeName }))} value={typeFilter} onChange={setTypeFilter}
                   allLabel="유형 전체" width={110}
                 />
                 {/* TODO: 드롭다운 추가 시 여기에 DropdownFilter 추가 */}

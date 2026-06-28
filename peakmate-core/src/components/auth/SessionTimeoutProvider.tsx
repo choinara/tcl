@@ -7,8 +7,8 @@ const WARNING_BEFORE = 5 * 60 * 1000;   // 만료 5분 전 경고
 
 export function SessionTimeoutProvider({ children }: { children: React.ReactNode }) {
   const [showWarning, setShowWarning] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
-  const warningRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const warningRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);

@@ -74,7 +74,7 @@ export const UserMemberCreate = () => {
       />
 
       <div className="flex-1 overflow-auto flex flex-col items-center py-6">
-        <CreateCardWrapper style={{ width: '925px', boxSizing: 'content-box' }} title="사용자 기본정보">
+        <CreateCardWrapper sx={{ width: '925px', boxSizing: 'content-box' }} title="사용자 기본정보">
           <form style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div className="flex flex-col gap-6">
               {/* Row 1: 사용자ID | 이름 */}

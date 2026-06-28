@@ -67,7 +67,7 @@ export default function TemplateL2Page() {
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   // TODO: 필요한 공통코드 그룹 추가
-  const { allCodes } = useCommonCodes(['STATUS_CODE']);
+  const allCodes = useCommonCodes('STATUS_CODE');
   const statusOptions = allCodes['STATUS_CODE'] ?? [];
 
   // 마스터 선택 상태
@@ -141,12 +141,12 @@ export default function TemplateL2Page() {
           <DateRangeFilter
             label="기간"
             dateFrom={dateFrom} dateTo={dateTo}
-            onChangeDateFrom={setDateFrom} onChangeDateTo={setDateTo}
+            onDateFromChange={setDateFrom} onDateToChange={setDateTo}
           />
           <FilterField label="필터링:">
             <div style={{ display: 'flex', gap: 2 }}>
               <DropdownFilter
-                options={statusOptions} value={statusFilter} onChange={setStatusFilter}
+                options={statusOptions.map(c => ({ value: c.code, label: c.codeName }))} value={statusFilter} onChange={setStatusFilter}
                 allLabel="상태 전체" width={110}
               />
             </div>

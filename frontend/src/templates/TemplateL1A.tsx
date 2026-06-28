@@ -52,7 +52,7 @@ export default function TemplateL1APage() {
   const [showAll, setShowAll] = useState(false);
 
   // TODO: 필요한 공통코드 그룹 추가
-  const { allCodes } = useCommonCodes(['STATUS_CODE']);
+  const allCodes = useCommonCodes('STATUS_CODE');
   const statusOptions = allCodes['STATUS_CODE'] ?? [];
 
   const [allData, setAllData] = useState<RowData[]>([]);
@@ -115,12 +115,12 @@ export default function TemplateL1APage() {
           <DateRangeFilter
             label="기간"
             dateFrom={dateFrom} dateTo={dateTo}
-            onChangeDateFrom={setDateFrom} onChangeDateTo={setDateTo}
+            onDateFromChange={setDateFrom} onDateToChange={setDateTo}
           />
           <FilterField label="필터링:">
             <div style={{ display: 'flex', gap: 2 }}>
               <DropdownFilter
-                options={statusOptions} value={status} onChange={setStatus}
+                options={statusOptions.map(c => ({ value: c.code, label: c.codeName }))} value={status} onChange={setStatus}
                 allLabel="상태 전체" width={110}
               />
               {/* TODO: 드롭다운 추가 시 여기에 DropdownFilter 추가 */}

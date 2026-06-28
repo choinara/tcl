@@ -194,7 +194,7 @@ export interface PeakEditGridRef {
 }
 
 export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(function PeakEditGrid(
-  { columns, data, gridId: gridIdProp, enableClipboard = false, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, extraToolbarButtonsAfterDelete, pageSize, inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false, getRowStyle },
+  { columns, data, gridId: gridIdProp, enableClipboard = false, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, extraToolbarButtonsAfterDelete, pageSize, inlineTotalRow: _inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false, getRowStyle },
   ref,
 ) {
   const gridRef = useRef<AgGridReact>(null);
@@ -324,13 +324,6 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
     }
   }, [prefStore.loaded, gridId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isColumnOrderCustomized = useMemo(() => {
-    if (defaultOrder.length !== columnOrder.length) return true;
-    return defaultOrder.some((name, i) => name !== columnOrder[i]);
-  }, [defaultOrder, columnOrder]);
-
-  const isCustomized = isColumnOrderCustomized || widthsCustomized;
-
   // ── 컬럼 숨김 (preferenceStore) ──
   const [hiddenColumns, setHiddenColumns] = useState<string[]>(() => {
     return prefStore.getColHidden(gridId) || [];
@@ -413,12 +406,12 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
     for (const id of columnOrder) {
       const col = colMap.get(id);
       if (col) {
-        result.push(col);
+        result.push(col as ColDef<any> | ColGroupDef<any>);
         colMap.delete(id);
       }
     }
     for (const col of colMap.values()) {
-      result.push(col);
+      result.push(col as ColDef<any> | ColGroupDef<any>);
     }
     // ColGroupDef는 처리 없이 뒤에 추가 (pinned 컬럼은 AG Grid가 자동 배치)
     result.push(...groupCols);
@@ -582,8 +575,8 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
   }, []);
 
   // ── 합계 행 선택/편집 방지 ──
-  const isRowSelectable = useCallback((params: { data: Record<string, unknown> }) => {
-    return !params.data?.__isTotal;
+  const isRowSelectable = useCallback((node: IRowNode<Record<string, unknown>>) => {
+    return !!node.data && !node.data.__isTotal;
   }, []);
 
   // ── Clipboard: Ctrl+C 복사 ──
@@ -963,7 +956,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
     const widths: Record<string, number> = {};
     colState.forEach((cs) => {
       if (cs.colId !== '__rowNum') {
-        widths[cs.colId] = cs.width;
+        widths[cs.colId] = cs.width ?? 0;
       }
     });
     setSavedWidths(widths);
@@ -980,7 +973,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
     const widths: Record<string, number> = {};
     api.getColumnState().forEach((cs) => {
       if (cs.colId !== '__rowNum') {
-        widths[cs.colId] = cs.width;
+        widths[cs.colId] = cs.width ?? 0;
       }
     });
     hasCustomWidthsRef.current = true;
@@ -1140,12 +1133,12 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
     const api = gridRef.current?.api;
     if (api) {
       // __checkbox, __rowNum을 먼저 배치한 뒤 사용자 컬럼 순서 적용
-      const prefix: { colId: string; pinned: string | null }[] = [];
+      const prefix: { colId: string; pinned: 'left' | 'right' | null }[] = [];
       if (showCheckbox) prefix.push({ colId: '__checkbox', pinned: 'left' });
       if (!hideRowNumber && features.rowNumber) prefix.push({ colId: '__rowNum', pinned: null });
       const defaultState = [
         ...prefix,
-        ...defaultOrder.filter(Boolean).map((colId) => ({ colId, pinned: null as string | null })),
+        ...defaultOrder.filter(Boolean).map((colId) => ({ colId, pinned: null as 'left' | 'right' | null })),
       ];
       api.applyColumnState({ state: defaultState, applyOrder: true });
       setTimeout(() => {
@@ -1171,7 +1164,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
       const widths: Record<string, number> = {};
       api.getColumnState().forEach((cs) => {
         if (cs.colId !== '__rowNum') {
-          widths[cs.colId] = cs.width;
+          widths[cs.colId] = cs.width ?? 0;
         }
       });
       hasCustomWidthsRef.current = true;
@@ -1188,7 +1181,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
       const widths: Record<string, number> = {};
       api.getColumnState().forEach((cs) => {
         if (cs.colId !== '__rowNum') {
-          widths[cs.colId] = cs.width;
+          widths[cs.colId] = cs.width ?? 0;
         }
       });
       hasCustomWidthsRef.current = true;

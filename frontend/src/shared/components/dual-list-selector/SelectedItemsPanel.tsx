@@ -170,7 +170,7 @@ export const SelectedItemsPanel = React.forwardRef<
                     const props = child.props as Record<string, unknown>;
                     return (
                       <th className="px-3 py-2 text-left font-medium text-[var(--color-text-secondary)]">
-                        {props.label || props.source || ''}
+                        {String(props.label || props.source || '')}
                       </th>
                     );
                   })}
@@ -202,7 +202,7 @@ export const SelectedItemsPanel = React.forwardRef<
                         const render = props.render;
                         return (
                           <td className="px-3 py-2 text-[var(--color-text-primary)]">
-                            {render ? render(item) : (source ? String(item[source] ?? '') : '')}
+                            {typeof render === 'function' ? (render as (item: Record<string, unknown>) => React.ReactNode)(item) : (typeof source === 'string' ? String((item as Record<string, unknown>)[source] ?? '') : '')}
                           </td>
                         );
                       })}

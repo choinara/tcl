@@ -12,7 +12,7 @@ export function createIsActiveColumn(overrides?: Partial<ColDef>): ColDef {
     cellEditor: 'agSelectCellEditor',
     cellEditorParams: { values: ['Y', 'N'] },
     valueFormatter: (params) => (params.value === 'Y' ? '사용' : params.value === 'N' ? '미사용' : ''),
-    cellStyle: (params) => (params.value === 'N' ? { color: '#94a3b8' } : {}),
+    cellStyle: (params) => (params.value === 'N' ? { color: '#94a3b8' } : null),
     ...overrides,
   };
 }
