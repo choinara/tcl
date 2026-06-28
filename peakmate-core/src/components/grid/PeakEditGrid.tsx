@@ -128,6 +128,8 @@ interface PeakEditGridProps {
   alwaysSaveable?: boolean;
   /** 툴바 우측 행추가 버튼 왼쪽에 삽입할 커스텀 버튼 */
   extraToolbarButtons?: React.ReactNode;
+  /** 툴바 우측 행삭제 버튼과 저장 버튼 사이에 삽입할 커스텀 버튼 */
+  extraToolbarButtonsAfterDelete?: React.ReactNode;
   /** 페이지당 행 수 (기본: 25) */
   pageSize?: number;
   /** 합계행을 하단 고정(pinned) 대신 데이터 마지막 행으로 표시 */
@@ -190,7 +192,7 @@ export interface PeakEditGridRef {
 }
 
 export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(function PeakEditGrid(
-  { columns, data, gridId: gridIdProp, enableClipboard = true, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, pageSize, inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false },
+  { columns, data, gridId: gridIdProp, enableClipboard = true, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, extraToolbarButtonsAfterDelete, pageSize, inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false },
   ref,
 ) {
   const gridRef = useRef<AgGridReact>(null);
@@ -1450,6 +1452,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
               {t('grid.deleteRow')}
             </button>
           )}
+          {extraToolbarButtonsAfterDelete}
           {enablePopupEdit && permission?.canCreate !== false && (
             <button
               onClick={handlePopupEdit}

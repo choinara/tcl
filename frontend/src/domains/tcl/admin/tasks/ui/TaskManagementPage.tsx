@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ColDef } from 'ag-grid-community';
+import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import { PeakEditGrid } from '@/components/grid';
 import type { PeakEditGridRef } from '@/components/grid';
 import { Modal } from '@/components/ui/Modal';
@@ -110,12 +110,21 @@ export default function TaskManagementPage() {
     notify(t('message.success.saved', '저장되었습니다'), { type: 'success' });
   }, [fetchTasks, fetchStats, notify, t]);
 
-  // Row click -> detail modal
-  const handleRowClick = useCallback((data: Record<string, unknown>) => {
-    const task = data as unknown as DevTask;
+  // 상세 모달 열기 (수정 버튼 또는 과제명 더블클릭)
+  const handleOpenDetail = useCallback((task: DevTask) => {
     setSelectedTask(task);
     setDetailOpen(true);
   }, []);
+
+  // 수정 버튼: 선택된 행의 상세 모달 열기
+  const handleEditClick = useCallback(() => {
+    const rows = gridRef.current?.getSelectedRows() ?? [];
+    if (rows.length === 0) {
+      notify(t('message.info.selectRow', '행을 먼저 선택해주세요'), { type: 'info' });
+      return;
+    }
+    handleOpenDetail(rows[0] as unknown as DevTask);
+  }, [handleOpenDetail, notify, t]);
 
   // Column definitions
   const columns = useMemo<ColDef[]>(() => {
@@ -136,8 +145,17 @@ export default function TaskManagementPage() {
         field: 'taskName',
         headerName: t('page.devtask.taskName', '과제명'),
         width: 280,
-        editable: true,
+        editable: false,
         headerClass: 'ag-header-required',
+        cellRenderer: (params: ICellRendererParams) => (
+          <span
+            onDoubleClick={() => params.data && handleOpenDetail(params.data as DevTask)}
+            style={{ cursor: 'pointer', display: 'block', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+            title={t('page.devtask.dblClickDetail', '더블클릭: 상세 보기')}
+          >
+            {params.value as string}
+          </span>
+        ),
       },
       {
         field: 'taskGroup',
@@ -234,7 +252,7 @@ export default function TaskManagementPage() {
         cellStyle: (params) => params.value === 'N' ? { textAlign: 'center', color: '#94a3b8' } : { textAlign: 'center' },
       },
     ];
-  }, [statusCodes, groupCodes, devTypeCodes, priorityCodes, t]);
+  }, [statusCodes, groupCodes, devTypeCodes, priorityCodes, t, handleOpenDetail]);
 
   // Filter select style
   const filterStyle: React.CSSProperties = {
@@ -308,7 +326,13 @@ export default function TaskManagementPage() {
         bodyHeight="fitToParent"
         onBatchSave={handleBatchSave}
         permission={perm}
-        onRowClick={handleRowClick}
+        extraToolbarButtonsAfterDelete={
+          perm.canRead && (
+            <button className="mes-btn" onClick={handleEditClick}>
+              {t('common.detail', '상세')}
+            </button>
+          )
+        }
         toolbarTitle={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <PageTitle menuCode={MENU_CODE} />
