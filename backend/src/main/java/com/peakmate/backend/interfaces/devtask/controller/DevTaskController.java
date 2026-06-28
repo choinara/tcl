@@ -3,8 +3,10 @@ package com.peakmate.backend.interfaces.devtask.controller;
 import com.peakmate.backend.domain.commoncode.entity.CommonCode;
 import com.peakmate.backend.domain.commoncode.service.CommonCodeDomainService;
 import com.peakmate.backend.domain.devtask.entity.DevTask;
+import com.peakmate.backend.domain.devtask.entity.DevTaskSchedule;
 import com.peakmate.backend.domain.log.service.SystemLogService;
 import com.peakmate.backend.infra.repository.devtask.DevTaskJpaRepository;
+import com.peakmate.backend.infra.repository.devtask.DevTaskScheduleJpaRepository;
 import com.peakmate.backend.interfaces.devtask.dto.request.DevTaskBatchRequest;
 import com.peakmate.backend.interfaces.devtask.dto.response.DevTaskResponse;
 import com.peakmate.backend.interfaces.devtask.dto.response.DevTaskStatsResponse;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class DevTaskController {
 
     private final DevTaskJpaRepository devTaskRepository;
+    private final DevTaskScheduleJpaRepository devTaskScheduleRepository;
     private final SystemLogService systemLogService;
     private final CommonCodeDomainService commonCodeDomainService;
 
@@ -162,6 +165,22 @@ public class DevTaskController {
             .toList();
 
         return ApiResponse.success(new DevTaskStatsResponse(all.size(), byStatus, byGroup));
+    }
+
+    @GetMapping("/schedules")
+    @RequirePermission(menu = "AD0010", action = "read")
+    public ApiResponse<List<Map<String, Object>>> getSchedules() {
+        List<DevTaskSchedule> schedules = devTaskScheduleRepository.findAll();
+        List<Map<String, Object>> result = schedules.stream().map(s -> {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("id", s.getId());
+            m.put("taskCode", s.getTaskCode());
+            m.put("stageCode", s.getStageCode());
+            m.put("stageStart", s.getStageStart() != null ? s.getStageStart().toString() : null);
+            m.put("stageEnd", s.getStageEnd() != null ? s.getStageEnd().toString() : null);
+            return m;
+        }).toList();
+        return ApiResponse.success(result);
     }
 
     private LocalDate parseDate(String s) {

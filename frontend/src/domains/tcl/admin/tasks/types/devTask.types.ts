@@ -37,3 +37,11 @@ export interface GroupStat {
   completed: number;
   rate: number;
 }
+
+export interface DevTaskSchedule {
+  id: number;
+  taskCode: string;
+  stageCode: string;
+  stageStart: string | null;
+  stageEnd: string | null;
+}

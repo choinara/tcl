@@ -164,6 +164,8 @@ interface PeakEditGridProps {
   onRowClick?: (data: Record<string, unknown>) => void;
   /** 합계행 강제 숨김 (글로벌 설정과 무관하게 이 그리드에서만 비활성) */
   hideTotalRow?: boolean;
+  /** 행 스타일 콜백 (지연 행 적색 표시 등) */
+  getRowStyle?: (params: RowClassParams) => Record<string, string> | undefined;
 }
 
 export interface PeakEditGridRef {
@@ -192,7 +194,7 @@ export interface PeakEditGridRef {
 }
 
 export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(function PeakEditGrid(
-  { columns, data, gridId: gridIdProp, enableClipboard = true, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, extraToolbarButtonsAfterDelete, pageSize, inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false },
+  { columns, data, gridId: gridIdProp, enableClipboard = false, bodyHeight = 500, onBatchSave, excelFileName = 'export', hideRowNumber = false, enablePopupEdit = false, saveButtonLabel, alwaysSaveable = false, extraToolbarButtons, extraToolbarButtonsAfterDelete, pageSize, inlineTotalRow = false, popupEditSearchFields, onPopupFieldSearch, totalFields, searchableGridFields, onGridFieldSearch, hideSave = false, toolbarTitle, autoHeight = false, hideRowButtons = false, onPasteComplete, onClipboardModeChange, showCheckbox = false, permission, onRowClick, hideTotalRow = false, getRowStyle },
   ref,
 ) {
   const gridRef = useRef<AgGridReact>(null);
@@ -1506,6 +1508,7 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
           enableCellSpan={true}
           enableBrowserTooltips={features.tooltip}
           getRowClass={getRowClass}
+          getRowStyle={getRowStyle}
           postSortRows={features.totalRowType === 'inline' ? postSortRows : undefined}
           quickFilterText={features.quickFilter ? quickFilterText : undefined}
           reactiveCustomComponents={true}
