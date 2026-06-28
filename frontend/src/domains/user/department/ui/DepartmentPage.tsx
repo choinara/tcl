@@ -201,6 +201,7 @@ export default function DepartmentPage() {
     { field: 'managerName', headerName: '부서장', width: 100 },
     {
       field: 'isActive', headerName: '활성', width: 70,
+      cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
       valueFormatter: (params) => params.value ? '활성' : '비활성',
     },
     {

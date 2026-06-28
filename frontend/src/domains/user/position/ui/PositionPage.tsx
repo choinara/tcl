@@ -129,6 +129,7 @@ export default function PositionPage() {
     { field: 'sortOrder', headerName: '정렬', width: 80 },
     {
       field: 'isActive', headerName: '활성', width: 80,
+      cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
       valueFormatter: (params) => params.value ? '활성' : '비활성',
     },
     {

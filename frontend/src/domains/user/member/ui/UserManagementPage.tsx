@@ -387,6 +387,7 @@ export default function UserManagementPage() {
       field: 'enabled',
       headerName: '상태',
       width: 80,
+      cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
       valueFormatter: (p) => p.value ? '활성' : '비활성',
     },
     {

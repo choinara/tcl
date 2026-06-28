@@ -193,6 +193,7 @@ export default function CompanyPage() {
     { field: 'businessNumber', headerName: '사업자번호', width: 130 },
     {
       field: 'isActive', headerName: '활성', width: 70,
+      cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
       valueFormatter: (params) => params.value ? '활성' : '비활성',
     },
     {

@@ -230,7 +230,7 @@ export default function CommonCodePage() {
         cellEditor: 'agSelectCellEditor',
         cellEditorParams: { values: ['Y', 'N'] },
         valueFormatter: (params) => params.value === 'Y' ? '사용' : '미사용',
-        cellStyle: (params) => params.value === 'N' ? { color: '#94a3b8' } : {},
+        cellStyle: (params) => params.value === 'N' ? { textAlign: 'center', color: '#94a3b8' } : { textAlign: 'center' },
       },
     ];
   }, [selectedGroup?.extra1Label, selectedGroup?.extra2Label]);
