@@ -19,8 +19,6 @@
     /* Path alias - peakmate-core paths first, app-specific fallback last */
     "baseUrl": ".",
     "paths": {
-      "@peakmate/e-approval": ["../../peakmate-Util/e-approval/frontend/src/index.ts"],
-
       /* npm package redirects — peakmate-core/src has no node_modules of its own,
          so TypeScript cannot traverse up to frontend/node_modules when compiling
          peakmate-core files included via the `include` array above.
