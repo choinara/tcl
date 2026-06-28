@@ -12,9 +12,6 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-  flyway:
-    enabled: false
-
 server:
   port: 0
 
