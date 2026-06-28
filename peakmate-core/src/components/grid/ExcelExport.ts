@@ -7,6 +7,8 @@ interface ExcelExportParams<T = unknown> {
   columnDefs: ColDef<T>[];
   fileName?: string;
   sheetName?: string;
+  /** 전달 시 api 순회 대신 이 데이터를 직접 사용 (전체 행 export용) */
+  rows?: Record<string, unknown>[];
 }
 
 /**
@@ -19,6 +21,7 @@ export async function exportToExcel<T = unknown>({
   columnDefs,
   fileName = 'export',
   sheetName = 'Sheet1',
+  rows: injectedRows,
 }: ExcelExportParams<T>): Promise<void> {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet(sheetName);
@@ -50,9 +53,13 @@ export async function exportToExcel<T = unknown>({
 
   // 데이터 행 추가
   const rowData: Record<string, unknown>[] = [];
-  api.forEachNodeAfterFilterAndSort((node) => {
-    if (node.data) rowData.push(node.data as Record<string, unknown>);
-  });
+  if (injectedRows) {
+    rowData.push(...injectedRows);
+  } else {
+    api.forEachNodeAfterFilterAndSort((node) => {
+      if (node.data) rowData.push(node.data as Record<string, unknown>);
+    });
+  }
 
   rowData.forEach((data) => {
     const row: Record<string, unknown> = {};

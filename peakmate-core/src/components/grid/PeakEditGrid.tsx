@@ -992,7 +992,12 @@ export const PeakEditGrid = forwardRef<PeakEditGridRef, PeakEditGridProps>(funct
   const handleExcel = useCallback(() => {
     const api = gridRef.current?.api;
     if (!api) return;
-    exportToExcel({ api, columnDefs: leafCols, fileName: excelFileName });
+    const total = allRowsRef.current.length;
+    if (total > 5000) {
+      coreNotify(`다운로드 제한 리스트는 5,000건 입니다. 현재 ${total.toLocaleString()}건 이기 때문에 필터 조건을 좁혀주세요`, { type: 'warning' });
+      return;
+    }
+    exportToExcel({ api, columnDefs: leafCols, fileName: excelFileName, rows: allRowsRef.current });
   }, [leafCols, excelFileName]);
 
   // ── CSV 내보내기 ──
